@@ -38,8 +38,8 @@
 ---
 # 🎨Chapter1. DirectX12 초기화
 ## Lecture1. 시작하기
-### 1. x
-![]()
+### 1. 프로젝트 셋팅 & 장치 초기화 완료(초기화면)
+![초기화면](Images/Chapter1/초기화.png)
 
 ## Lecture2. 시작하기
 ### 1. x
