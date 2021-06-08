@@ -9,6 +9,8 @@
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
+WindowInfo GWindowInfo;
+
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
@@ -43,9 +45,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 
     MSG msg;
+
+	GWindowInfo.width = 800; // 가로
+	GWindowInfo.height = 600; // 세로
+	GWindowInfo.windowed = true; // 창모드
+
 	// 성능에 손해가 있어도 안정성을 위한 코드. 언리얼도 이렇게 설계됨.
 	unique_ptr<Game> game = make_unique<Game>(); // 스마트포인터
-	game->Init(); // 초기화
+	game->Init(GWindowInfo); // 초기화
 
     // 기본 메시지 루프입니다:
     while (true)
@@ -124,6 +131,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
+
+   GWindowInfo.hwnd = hWnd; // 윈도우 핸들을 받아줌.
 
    return TRUE;
 }
