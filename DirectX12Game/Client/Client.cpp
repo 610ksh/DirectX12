@@ -1,14 +1,22 @@
 ﻿// Client.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 
-#include "pch.h"
+#include "pch.h" // 따로 추가해 준 코드. (pch기능을 사용하기전에 만들어진 소스 파일이기 때문)
 #include "framework.h"
 #include "Client.h"
+
+// 우리가 추가한 코드
 #include "Game.h"
 
 #define MAX_LOADSTRING 100
 
-// 전역 변수:
+/*
+	WindowInfo 전역 변수 선언.
+	윈도우 창과 관련된 정보가 있다.
+	EnginePch에 선언해둠.
+	구조체 형식. 윈도우 핸들값도 가짐
+*/ 
+// WindowInfo 전역 변수 선언.
 WindowInfo GWindowInfo;
 
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
@@ -46,14 +54,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-	GWindowInfo.width = 800; // 가로
-	GWindowInfo.height = 600; // 세로
-	GWindowInfo.windowed = true; // 창모드
+	GWindowInfo.width = 800; // window 창의 가로
+	GWindowInfo.height = 600; // window 창의 세로
+	GWindowInfo.windowed = true; // 창모드로 설정
 
-	// 성능에 손해가 있어도 안정성을 위한 코드. 언리얼도 이렇게 설계됨.
-	unique_ptr<Game> game = make_unique<Game>(); // 스마트포인터
-	game->Init(GWindowInfo); // 초기화
+	// 성능에 손해가 있어도 안정성을 위한 스마트포인터. 언리얼도 이렇게 설계됨.
+	// unique_ptr, make_unique 모두다 memory 헤더에 존재. pch에 넣어뒀음.
+	unique_ptr<Game> game = make_unique<Game>(); // Game 객체를 하나 생성한다.
+	game->Init(GWindowInfo); // 게임 클래스 초기화
 
+	/*
+		실제 메인 게임 루프가 시작되는 곳.
+		유니티의 Update, 언리얼의 Tick 함수.
+
+	*/
     // 기본 메시지 루프입니다:
     while (true)
     {
@@ -79,7 +93,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     return (int) msg.wParam;
 }
 
-
+// Main 함수가 끝나는 부분임.
+/////////////////////////////////////////////////////////////////////////////
 
 //
 //  함수: MyRegisterClass()
@@ -100,7 +115,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_CLIENT));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = nullptr;
+    wcex.lpszMenuName   = nullptr; // 메뉴 바에 있는 이름들. nullptr로 하면 다 사라짐.
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 

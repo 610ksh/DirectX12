@@ -3,7 +3,7 @@
 // 각종 include
 #include <windows.h>
 #include <tchar.h>
-#include <memory>
+#include <memory> // unique_ptr, make_unique 있음
 #include <string>
 #include <vector>
 #include <array>
@@ -11,7 +11,16 @@
 #include <map>
 using namespace std;
 
-#include "d3dx12.h"
+/*
+	d3dx12.h는 특별하다.
+	공식적으로 만들어진 파일이 아니라,
+	우리가 외부에서 받아온 파일을 사용하는것.
+	그래서 외부 표시인 " "이 적혀있음.
+	이 파일의 명칭을 보통 D3D12 Helper Library 라고 부름.
+	
+*/
+#include "d3dx12.h" // 외부에서 다운받아 추가함.
+
 #include <d3d12.h>
 #include <wrl.h>
 #include <d3dcompiler.h>
