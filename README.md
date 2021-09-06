@@ -1,10 +1,11 @@
 # 🚀DirectX12
 - DirectX12와 관련된 학습 내용입니다.
 
-- 최종 결과 (미정)　
+- 최종 결과 (추후에 추가할 예정입니다)　
 ![]()
+#
 
-- 목차
+## 🌳 목차
 1. DirectX12 초기화
 2. Component
 3. Vector & Matrix
@@ -18,7 +19,7 @@
 
 ## ☑ TODO
 - [x] 2021.06.07 Start project
-- [x] 2021.06.07 최초 프로젝트 설정 및 셋팅
+- [x] 2021.06.07 최초 프로젝트 설정 및 셋팅 / https://blog.naver.com/610ksh/222388342098
 - [x] 2021.06.08 장치 초기화
 - [ ] 삼각형 띄우기
 - [ ] Constant Buffer
@@ -39,7 +40,7 @@
 # 🎨Chapter1. DirectX12 초기화
 ## Lecture1. 시작하기
 ### 1. 프로젝트 셋팅 & 장치 초기화 완료(초기화면)
-![초기화면](Images/Chapter1/초기화.png)
+![초기화면](Git_Resources/Chapter1/초기화.png)
 
 ## Lecture2. 시작하기
 ### 1. x
