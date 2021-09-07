@@ -4,5 +4,5 @@
 
 // 전역 클래스를 스마트포인터 형태로 만듦.
 // EnginePch.h를 포함하는 모든 곳에서 Engine 객체에 접근가능.
-// 단 한번만 생성되고 계속 살아있음.
+// 단 한번만 생성되고 계속 살아있음. 일종의 싱글톤 형태임.
 unique_ptr<Engine> GEngine = make_unique<Engine>();

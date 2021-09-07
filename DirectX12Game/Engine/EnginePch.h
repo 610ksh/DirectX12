@@ -65,5 +65,5 @@ struct WindowInfo
 	bool windowed; // 창모드 or 전체화면
 };
 
-// 전방선언까지 해주자.
-extern unique_ptr<class Engine> GEngine;
+// Engine 클래스 전역변수. 일종의 싱글톤 형태. 전방선언까지 해주자.
+extern unique_ptr<class Engine> GEngine; // 외부에서 접근가능(extern)

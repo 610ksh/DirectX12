@@ -44,7 +44,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDC_CLIENT, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // 애플리케이션 초기화를 수행합니다:
+    // 애플리케이션 초기화를 수행합니다: // WindowInfo에 대한 핸들값을 받아오는곳(hwnd)
     if (!InitInstance (hInstance, nCmdShow))
     {
         return FALSE;
@@ -53,7 +53,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 
     MSG msg;
-
+	
+	// GWindowInfo 초기화
 	GWindowInfo.width = 800; // window 창의 가로
 	GWindowInfo.height = 600; // window 창의 세로
 	GWindowInfo.windowed = true; // 창모드로 설정

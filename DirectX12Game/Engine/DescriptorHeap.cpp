@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "DescriptorHeap.h"
-#include "SwapChain.h"
+#include "SwapChain.h" // 전방선언 했던것 여기서 추가
 
 void DescriptorHeap::Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swapChain)
 {
@@ -13,17 +13,19 @@ void DescriptorHeap::Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swa
 
 	_rtvHeapSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
+	// 이번에도 DescriptorHeap을 생성하기 위한 설명서 도구 제작. rtv 설명서.
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDesc;
 	rtvDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV; // RTV
-	rtvDesc.NumDescriptors = SWAP_CHAIN_BUFFER_COUNT; // 버퍼 숫자 : 2
+	rtvDesc.NumDescriptors = SWAP_CHAIN_BUFFER_COUNT; // 버퍼 숫자만큼 DescriptorHeap도 생성한다.
 	rtvDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE; // NONE
 	rtvDesc.NodeMask = 0;
 
 	// 같은 종류의 데이터끼리 배열로 관리
 	// RTV 목록 : [ ] [ ]    (2개)
-	device->CreateDescriptorHeap(&rtvDesc, IID_PPV_ARGS(&_rtvHeap)); // 배열 생성
+	// DescriptorHeap 객체 생성 -> rtvHeap
+	device->CreateDescriptorHeap(&rtvDesc, IID_PPV_ARGS(&_rtvHeap)); // rtvHeap은 배열 형태임.
 
-	// RTV의 시작 위치를 들고 있음. 정수형태란게 특징.
+	// RTV의 시작 위치 주소를 들고 있음. 정수 형태란 게 특징.
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = _rtvHeap->GetCPUDescriptorHandleForHeapStart();
 
 	for (int i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)

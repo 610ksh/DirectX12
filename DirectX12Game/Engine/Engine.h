@@ -2,18 +2,18 @@
 
 
 
-
 class Engine
 {
 public:
+	// Client 프로젝트의 Game 클래스에서 호출할 예정인 함수들
+	// public으로 선언해줘야한다.
 	void Init(const WindowInfo& info);
 	void Render();
 
 public:
 	// 요청사항을 CommandQueue에 넣어주는것
 	void RenderBegin();
-
-	// 쌓아놓은 일감을 GPU에게 외주로 넘겨줌
+	// 쌓아놓은 일감을 최종적으로 GPU에게 외주로 넘겨줌
 	void RenderEnd();
 
 	void ResizeWindow(int32 width, int32 height);

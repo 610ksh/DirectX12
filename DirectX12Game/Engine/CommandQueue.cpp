@@ -68,6 +68,7 @@ void CommandQueue::WaitSync()
 
 }
 
+// 어디에 그림을 그릴지 결정해줌(백버퍼 지정)
 void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rect)
 {
 	// 한번 초기화를 싹다해줌. 실제로 줄어드는건 아님 (vector의 capacity 개념)
@@ -90,32 +91,39 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 	// 어떤 버퍼에 그림을 그려야할지 설정.
 	// Specify the buffers we are going to render to.
 	D3D12_CPU_DESCRIPTOR_HANDLE backBufferView = _descHeap->GetBackBufferView();
+	// 현재 backbuffer의 rtv를 초기화해준다. 종이를 리셋시켜줌.
 	_cmdList->ClearRenderTargetView(backBufferView, Colors::LightSteelBlue, 0, nullptr);
 	_cmdList->OMSetRenderTargets(1, &backBufferView, FALSE, nullptr);
 }
 
+// 백버퍼에 그려진 내용을 화면에 출력하도록 교체해줌.
 void CommandQueue::RenderEnd()
 {
 	// 기본적으로 Begin의 반대개념임.
+	// 백버퍼에서 그렸던것을 이제 화면으로 가져오고,
+	// 화면에 출력하고 있던 것을 백버퍼로 위치를 바꿔줘야함.
 
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
 		_swapChain->GetCurrentBackBufferResource().Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, // 외주 결과물
 		D3D12_RESOURCE_STATE_PRESENT); // 화면 출력
 
+	// 위에서 만든 배리어를 리스트에 넣음.
 	_cmdList->ResourceBarrier(1, &barrier);
-	_cmdList->Close(); // 여기까지 작업한것을 넘겨주기 위해 리스트를 닫음. 일감 중단.
+	_cmdList->Close(); // 여기까지 작업한 것을 넘겨주기 위해 리스트를 닫음. 일감 중단.
 
-	// 커맨드 리스트 수행
+	// 해당하는 리스트를 ID3D12CommandList로 다시 받아옴.
 	ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
-	_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr); // 실행을 요청함
+	// CommandList를 수행함. Execute. 현재 화면에 실행을 요청함.
+	_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr); 
 
-	_swapChain->Present(); // 버퍼를 교체함.
+	// 버퍼를 교체함. swapChain에게 알려줘야함. 실제 버퍼는 거기에 있으니까.
+	_swapChain->Present(); 
 
 	// Wait until frame commands are complete.  This waiting is inefficient and is
 	// done for simplicity.  Later we will show how to organize our rendering code
 	// so we do not have to wait per frame.
-	WaitSync(); // 될때가지 기다림.
+	WaitSync(); // 한 프레임에 모두 출력 될때까지 기다림.
 
-	_swapChain->SwapIndex(); // 인덱스 교체
+	_swapChain->SwapIndex(); // 인덱스도 마저 교체해주자.
 }
