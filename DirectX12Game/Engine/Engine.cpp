@@ -50,10 +50,11 @@ void Engine::ResizeWindow(int32 width, int32 height)
 	_window.width = width;
 	_window.height = height;
 
+	// Rect : WinAPI (왼쪽위(원점), 오른쪽 아래), 2점으로 만드는 rectangle
 	RECT rect = { 0, 0, width, height };
-	// 윈도우 크기 조정
+	// 윈도우 크기 조정, :: 의미는 WinAPI의 함수(글로벌)
 	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
-	// 윈도우 위치 설정
+	// 윈도우 위치 설정, 윈도우 핸들 정보 필요
 	::SetWindowPos(_window.hwnd, 0, 100, 100, width, height, 0);
 }
 
