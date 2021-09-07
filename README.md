@@ -6,7 +6,7 @@
 #
 
 ## 🌳 목차
-1. DirectX12 초기화
+1. DirectX12 Initialization
 2. Component
 3. Vector & Matrix
 4. Camera & Lighting
