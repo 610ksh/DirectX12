@@ -10,13 +10,16 @@ CommandQueue::~CommandQueue()
 
 void CommandQueue::Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swapChain, shared_ptr<DescriptorHeap> descHeap)
 {
+	// 받아온 변수들을 초기화 해준다.
 	_swapChain = swapChain;
 	_descHeap = descHeap;
 
+	// CreateCommandQueue를 하기 위한 도구 생성. 일종의 설명서
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 	queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 	queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 
+	// _cmdQueue 변수 생성. device를 통해서 한다. 위에서 만든 도구를 넣어줌 (설명서)
 	device->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&_cmdQueue));
 
 	// - D3D12_COMMAND_TYPE_DIRECT : GPU가 직접 실행하는 명령 목록.
@@ -41,6 +44,7 @@ void CommandQueue::Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swapC
 	_fenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
 }
 
+// CPU와 GPU의 동기화를 위한 코드. 책 내용 그대로 옮김.
 void CommandQueue::WaitSync()
 {
 	// Advance the fence value to mark commands up to this fence point
@@ -61,8 +65,6 @@ void CommandQueue::WaitSync()
 		// Wait until the GPU hits current fence event is fired.
 		::WaitForSingleObject(_fenceEvent, INFINITE);
 	}
-
-
 
 }
 

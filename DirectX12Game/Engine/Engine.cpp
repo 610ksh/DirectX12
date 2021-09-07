@@ -12,14 +12,15 @@ void Engine::Init(const WindowInfo& info)
 
 	// 그려질 화면 크기를 설정
 	_viewport = { 0, 0, static_cast<FLOAT>(info.width), static_cast<FLOAT>(info.height), 0.0f, 1.0f };
-	_scissorRect = CD3DX12_RECT(0, 0, info.width, info.height); // d3dx12.h 함수 이용.
+	_scissorRect = CD3DX12_RECT(0, 0, info.width, info.height); // 함수명 C가 붙은건 d3dx12.h 함수 이용함을 의미함.
 
-
+	// 각 클래스에 해당하는 변수들 동적할당으로 생성. (클래스를 인스턴스화함)
 	_device = make_shared<Device>();
 	_cmdQueue = make_shared<CommandQueue>();
 	_swapChain = make_shared<SwapChain>();
 	_descHeap = make_shared<DescriptorHeap>();
 
+	// 해당하는 변수들 초기화. 내용물이 생김
 	_device->Init();
 	_cmdQueue->Init(_device->GetDevice(), _swapChain, _descHeap);
 	_swapChain->Init(info, _device->GetDXGI(), _cmdQueue->GetCmdQueue());
