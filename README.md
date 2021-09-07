@@ -20,7 +20,7 @@
 ## ☑ TODO
 - [x] 2021.06.07 Start project
 - [x] 2021.06.07 최초 프로젝트 설정 및 셋팅 / https://blog.naver.com/610ksh/222388342098
-- [x] 2021.06.08 장치 초기화
+- [x] 2021.06.08 장치 초기화 / https://blog.naver.com/610ksh/222389757864
 - [ ] 삼각형 띄우기
 - [ ] Constant Buffer
 - [ ] Root Signature
