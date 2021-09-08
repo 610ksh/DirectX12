@@ -1,18 +1,16 @@
 #include "pch.h"
 #include "CommandQueue.h"
 #include "SwapChain.h"
-#include "DescriptorHeap.h"
 
 CommandQueue::~CommandQueue()
 {
 	::CloseHandle(_fenceEvent); // 이벤트를 모두 제거
 }
 
-void CommandQueue::Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swapChain, shared_ptr<DescriptorHeap> descHeap)
+void CommandQueue::Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swapChain)
 {
 	// 받아온 변수들을 초기화 해준다.
 	_swapChain = swapChain;
-	_descHeap = descHeap;
 
 	// CreateCommandQueue를 하기 위한 도구 생성. 일종의 설명서
 	D3D12_COMMAND_QUEUE_DESC queueDesc = {};
@@ -77,7 +75,7 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 
 	// 배리어 생성
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-		_swapChain->GetCurrentBackBufferResource().Get(),
+		_swapChain->GetBackRTVBuffer().Get(),
 		D3D12_RESOURCE_STATE_PRESENT, // 화면 출력
 		D3D12_RESOURCE_STATE_RENDER_TARGET); // 외주 결과물
 
@@ -89,8 +87,8 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 	_cmdList->RSSetScissorRects(1, rect);
 
 	// 어떤 버퍼에 그림을 그려야할지 설정.
-	// Specify the buffers we are going to render to.
-	D3D12_CPU_DESCRIPTOR_HANDLE backBufferView = _descHeap->GetBackBufferView();
+	// Specify the buffers we are going to render to.  // 실제 RTV가 필요함
+	D3D12_CPU_DESCRIPTOR_HANDLE backBufferView = _swapChain->GetBackRTV();
 	// 현재 backbuffer의 rtv를 초기화해준다. 종이를 리셋시켜줌.
 	_cmdList->ClearRenderTargetView(backBufferView, Colors::LightSteelBlue, 0, nullptr);
 	_cmdList->OMSetRenderTargets(1, &backBufferView, FALSE, nullptr);
@@ -104,7 +102,7 @@ void CommandQueue::RenderEnd()
 	// 화면에 출력하고 있던 것을 백버퍼로 위치를 바꿔줘야함.
 
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-		_swapChain->GetCurrentBackBufferResource().Get(),
+		_swapChain->GetBackRTVBuffer().Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, // 외주 결과물
 		D3D12_RESOURCE_STATE_PRESENT); // 화면 출력
 

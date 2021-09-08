@@ -1,7 +1,17 @@
 #include "pch.h"
 #include "SwapChain.h"
+#include "Engine.h"
+#include "Device.h"
 
-void SwapChain::Init(const WindowInfo & info, ComPtr<IDXGIFactory> dxgi, ComPtr<ID3D12CommandQueue> cmdQueue)
+void SwapChain::Init(const WindowInfo & info, ComPtr<ID3D12Device> device, ComPtr<IDXGIFactory> dxgi, ComPtr<ID3D12CommandQueue> cmdQueue)
+{
+	// CreateSwapChain
+	CreateSwapChain(info, dxgi, cmdQueue);
+	// CrateRTV
+	CreateRTV(device);
+}
+
+void SwapChain::CreateSwapChain(const WindowInfo & info, ComPtr<IDXGIFactory> dxgi, ComPtr<ID3D12CommandQueue> cmdQueue)
 {
 	// 이전에 만든 정보 날린다
 	_swapChain.Reset();
@@ -29,17 +39,53 @@ void SwapChain::Init(const WindowInfo & info, ComPtr<IDXGIFactory> dxgi, ComPtr<
 
 	// 버퍼 개수 만큼 돌면서 swapChain 변수와 실제 렌더 타깃을 연결짓는다. 버퍼 인덱스와 renderTarget연결
 	for (int32 i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
-		_swapChain->GetBuffer(i, IID_PPV_ARGS(&_renderTargets[i]));
+		_swapChain->GetBuffer(i, IID_PPV_ARGS(&_rtvBuffer[i]));
 }
 
-// 현재 프레임을 보냄
+// 기존의 DescriptorHeap의 Init 부분. RTV를 만드는 용도
+void SwapChain::CreateRTV(ComPtr<ID3D12Device> device)
+{
+	// Descriptor (DX12) = View (~DX11)
+	// [서술자 힙]으로 RTV 생성
+	// DX11의 RTV(RenderTargetView), DSV(DepthStencilView), 
+	// CBV(ConstantBufferView), SRV(ShaderResourceView), UAV(UnorderedAccessView)를 전부 하나로 합침!
+
+	int rtvHeapSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+	// 이번에도 DescriptorHeap을 생성하기 위한 설명서 도구 제작. rtv 설명서.
+	D3D12_DESCRIPTOR_HEAP_DESC rtvDesc;
+	rtvDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV; // RTV
+	rtvDesc.NumDescriptors = SWAP_CHAIN_BUFFER_COUNT; // 버퍼 숫자만큼 DescriptorHeap도 생성한다.
+	rtvDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE; // NONE
+	rtvDesc.NodeMask = 0;
+
+	// 같은 종류의 데이터끼리 배열로 관리
+	// RTV 목록 : [ ] [ ]    (2개)
+	// DescriptorHeap 객체 생성 -> rtvHeap
+	DEVICE->CreateDescriptorHeap(&rtvDesc, IID_PPV_ARGS(&_rtvHeap)); // rtvHeap은 배열 형태임.
+
+	// RTV의 시작 위치 주소를 들고 있음. 정수 형태란 게 특징.
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = _rtvHeap->GetCPUDescriptorHandleForHeapStart();
+
+	for (int i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
+	{
+		// d3dx12.h 헬퍼 클래스 기능을 이용함.
+		_rtvHandle[i] = CD3DX12_CPU_DESCRIPTOR_HANDLE(rtvHeapBegin, i * rtvHeapSize);
+		device->CreateRenderTargetView(_rtvBuffer[i].Get(), nullptr, _rtvHandle[i]);
+	}
+
+	/// 여기까지 진행하면 GPU에게 view라는것을 넘겨줄 수 있는 상태가 된것. 포장 끝!
+}
+
+
+// 현재 프레임을 보냄. CommandQueue의 RenderEnd에서 호출
 void SwapChain::Present()
 {
 	// Present the frame.
 	_swapChain->Present(0, 0);
 }
 
-// 백 버퍼의 인덱스를 교체함
+// 백 버퍼의 인덱스를 교체함. CommandQueue의 RenderEnd에서 호출
 void SwapChain::SwapIndex()
 {
 	// 우리는 2개니까 0과 1이 반복되도록함. 0 -> 1, 1 -> 0 으로 바뀜

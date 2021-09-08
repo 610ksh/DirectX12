@@ -28,21 +28,36 @@
 class SwapChain
 {
 public:
-	void Init(const WindowInfo& info, ComPtr<IDXGIFactory> dxgi, ComPtr<ID3D12CommandQueue> cmdQueue);
+	void Init(const WindowInfo& info, ComPtr<ID3D12Device> device, ComPtr<IDXGIFactory> dxgi, ComPtr<ID3D12CommandQueue> cmdQueue);
 	void Present();
 	void SwapIndex();
 
 	// getter
 	ComPtr<IDXGISwapChain> GetSwapChain() { return _swapChain; }
-	ComPtr<ID3D12Resource> GetRenderTarget(int32 index) { return _renderTargets[index]; }
+	ComPtr<ID3D12Resource> GetRenderTarget(int32 index) { return _rtvBuffer[index]; }
 
-	uint32 GetCurrentBackBufferIndex() { return _backBufferIndex; }
-	ComPtr<ID3D12Resource> GetCurrentBackBufferResource() { return _renderTargets[_backBufferIndex]; }
+	// uint32 GetCurrentBackBufferIndex() { return _backBufferIndex; } // 필요없어서 제거
+	ComPtr<ID3D12Resource> GetBackRTVBuffer() { return _rtvBuffer[_backBufferIndex]; }
+
+	// 백버퍼 RTV getter
+	D3D12_CPU_DESCRIPTOR_HANDLE GetBackRTV() { return _rtvHandle[_backBufferIndex]; }
+
+private:
+	void CreateSwapChain(const WindowInfo & info, ComPtr<IDXGIFactory> dxgi, ComPtr<ID3D12CommandQueue> cmdQueue);
+	// DescriptorHeap 부분의 Init 함수를 가져옴
+	void CreateRTV(ComPtr<ID3D12Device> device);
+
 
 private:
 	// SwapChain 변수 3총사
 	ComPtr<IDXGISwapChain>	_swapChain; // swapChain
-	ComPtr<ID3D12Resource>	_renderTargets[SWAP_CHAIN_BUFFER_COUNT]; // 버퍼. 우리는 더블 버퍼링을 이용할 예정. 2개 사이즈의 배열
+	ComPtr<ID3D12Resource>	_rtvBuffer[SWAP_CHAIN_BUFFER_COUNT]; // 버퍼. 우리는 더블 버퍼링을 이용할 예정. 2개 사이즈의 배열
 	uint32					_backBufferIndex = 0; // 백버퍼에 해당하는 배열의 인덱스를 지정.
+
+
+	// DescriptorHeap 부분에 있던것을 가져옴
+	ComPtr<ID3D12DescriptorHeap>	_rtvHeap;
+	D3D12_CPU_DESCRIPTOR_HANDLE		_rtvHandle[SWAP_CHAIN_BUFFER_COUNT];
+
 };
 

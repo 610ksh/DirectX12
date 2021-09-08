@@ -9,7 +9,7 @@ public:
 	// 필요없긴한데, 이벤트 소멸 때문에 추가함.
 	~CommandQueue();
 
-	void Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swapChain, shared_ptr<DescriptorHeap> descHeap);
+	void Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChain> swapChain);
 	void WaitSync(); // CPU와 GPU의 동기화를 위한 함수. 책 내용 그대로 옮김.
 	
 	void RenderBegin(const D3D12_VIEWPORT* vp, const D3D12_RECT* rect);
@@ -17,6 +17,7 @@ public:
 	
 	// getter, 외부에서 CommandQueue를 필요할때 사용하기 위함. _cmdQueue만 있으면 된다.
 	ComPtr<ID3D12CommandQueue> GetCmdQueue() { return _cmdQueue; }
+	ComPtr<ID3D12GraphicsCommandList> GetCmdList() { return _cmdList; }
 
 private:
 	// 크게 보면 CommandQueue와 Fence를 만드는것과 같다.
@@ -36,8 +37,7 @@ private:
 	uint32								_fenceValue = 0;
 	HANDLE								_fenceEvent = INVALID_HANDLE_VALUE;
 
-	// SwapChain, DescriptorHeap
+	// SwapChain
 	shared_ptr<SwapChain>				_swapChain;
-	shared_ptr<DescriptorHeap>			_descHeap;
 
 };
