@@ -5,13 +5,14 @@
 void Shader::Init(const wstring& path)
 {
 	// VertexShader 생성
-	CreateVertexShader(path, "VS_Main", "vs_5_0");
+	CreateVertexShader(path, "VS_Main", "vs_5_0"); // 메인함수 생성
 	// PixelShader 생성
-	CreatePixelShader(path, "PS_Main", "ps_5_0");
+	CreatePixelShader(path, "PS_Main", "ps_5_0"); // 메인함수 생성
 
 	// pipeline에 대한 설명서 제작을 위한 편수
 	D3D12_INPUT_ELEMENT_DESC desc[] =
 	{
+		// 위치값과 색상이 어떤식으로 들어가게 될지 설정해주고 있음.
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
 	};
@@ -36,8 +37,12 @@ void Shader::Init(const wstring& path)
 
 void Shader::Update()
 {
+	// Init에서 만들었던 pipelineState를 가지고 파이프라인을 새롭게 설정.
 	CMD_LIST->SetPipelineState(_pipelineState.Get());
 }
+
+
+/// 밑의 함수들은 Init 함수에서 호출되는 함수들.
 
 void Shader::CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode)
 {
@@ -46,7 +51,7 @@ void Shader::CreateShader(const wstring& path, const string& name, const string&
 	compileFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	// 쉐이더 파일을 읽어와 파싱한다.
+	// 쉐이더 파일을 읽어와 파싱한다. 못 읽었다면 아래의 내용의 메시지 박스를 호출함.
 	if (FAILED(::D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
 		, name.c_str(), version.c_str(), compileFlag, 0, &blob, &_errBlob)))
 	{
@@ -58,10 +63,12 @@ void Shader::CreateShader(const wstring& path, const string& name, const string&
 
 void Shader::CreateVertexShader(const wstring& path, const string& name, const string& version)
 {
+	// pipelineDesc 내용의 VS 부분으로
 	CreateShader(path, name, version, _vsBlob, _pipelineDesc.VS);
 }
 
 void Shader::CreatePixelShader(const wstring& path, const string& name, const string& version)
 {
+	// pipelineDesc 내용의 PS 부분으로
 	CreateShader(path, name, version, _psBlob, _pipelineDesc.PS);
 }

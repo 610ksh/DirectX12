@@ -94,8 +94,10 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 	// 어떤 버퍼에 그림을 그려야할지 설정.
 	// Specify the buffers we are going to render to.  // 실제 RTV가 필요함
 	D3D12_CPU_DESCRIPTOR_HANDLE backBufferView = _swapChain->GetBackRTV();
+	
 	// 현재 backbuffer의 rtv를 초기화해준다. 종이를 리셋시켜줌.
 	_cmdList->ClearRenderTargetView(backBufferView, Colors::LightSteelBlue, 0, nullptr);
+
 	_cmdList->OMSetRenderTargets(1, &backBufferView, FALSE, nullptr);
 }
 
@@ -117,6 +119,7 @@ void CommandQueue::RenderEnd()
 
 	// 해당하는 리스트를 ID3D12CommandList로 다시 받아옴.
 	ID3D12CommandList* cmdListArr[] = { _cmdList.Get() };
+
 	// CommandList를 수행함. Execute. 현재 화면에 실행을 요청함.
 	_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr); 
 

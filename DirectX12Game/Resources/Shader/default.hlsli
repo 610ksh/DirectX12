@@ -1,11 +1,11 @@
 
-// 레지스터 b0의 값을 의미함
+// 4바이트 위치 값을 담당
 cbuffer TEST_B0 : register(b0)
 {
 	float4 offset0;
 };
 
-// 레지스터 b1의 값을 의미함
+// 4바이트 색상 쪽을 담당
 cbuffer TEST_B1 : register(b1)
 {
 	float4 offset1;
@@ -36,6 +36,7 @@ VS_OUT VS_Main(VS_IN input)
 	return output;
 }
 
+// PS = Pixel Shader
 float4 PS_Main(VS_OUT input) : SV_Target
 {
 	return input.color;

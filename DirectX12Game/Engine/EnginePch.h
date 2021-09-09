@@ -71,9 +71,10 @@ struct Vertex
 	Vec4 color;
 };
 
-
+// 물체의 정보
 struct Transform
 {
+	// float 4개
 	Vec4 offset;
 };
 

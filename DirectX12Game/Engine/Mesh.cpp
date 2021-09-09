@@ -23,10 +23,11 @@ void Mesh::Init(vector<Vertex>& vec)
 		IID_PPV_ARGS(&_vertexBuffer));
 	// vertexBuffer는 gpu에서 할당받은 공간을 가리키게됨.
 	
-	// Copy the triangle data to the vertex buffer. gpu 공간에 데이터를 복사하는 과정(Map, Unmap)
-	void* vertexDataBuffer = nullptr;
+	// Copy the triangle data to the vertex buffer.
+	// gpu 공간에 데이터를 복사하는 과정(Map, Unmap)
+	void* vertexDataBuffer = nullptr; // 임시 데이터 버퍼
 	CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
-	_vertexBuffer->Map(0, &readRange, &vertexDataBuffer); // gpu 공간과 연결
+	_vertexBuffer->Map(0, &readRange, &vertexDataBuffer); // gpu 공간과 연결.
 	::memcpy(vertexDataBuffer, &vec[0], bufferSize); // gpu쪽으로 실제 복사되어 넘어가는 함수
 	_vertexBuffer->Unmap(0, nullptr); // gpu 공간과 연결해제
 
@@ -54,9 +55,12 @@ void Mesh::Render()
 	// 2) Buffer의 주소를 register에다가 전송
 
 	// (연결지을 레지스터 번호, 복사할 데이터값, 그 크기)
-	GEngine->GetCB()->PushData(0, &_transform, sizeof(_transform));
-	GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform));
-
+	// 이 부분에서 쉐이더 코드의 0과 1이 결정됨. 첫번째 4바이트, 2번째 4바이트
+	// ※ 넘기는 transform이 같은 변수이기 때문에 결국 1개의 transform을 가지고,
+	// 2개의 변수, 위치값과 색상값을 변경하고 있음. 그래서 독립적으로 보이지 않은거임.
+	GEngine->GetCB()->PushData(0, &_transform, sizeof(_transform)); // 위치값 조절
+	GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform)); // 색상값 조절
+	
 	// 실제로 화면에 그림
 	CMD_LIST->DrawInstanced(_vertexCount, 1, 0, 0);
 }

@@ -5,7 +5,7 @@
 #include "SwapChain.h"
 #include "RootSignature.h"
 #include "Mesh.h"
-#include "Shader.h"
+#include "Shader.h" // 클라이언트쪽에서 필요하기 떄문에 넣어줌. (Game.cpp)
 #include "ConstantBuffer.h"
 
 class Engine
