@@ -46,6 +46,9 @@
     <ClCompile Include="Shader.cpp">
       <Filter>소스 파일\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="ConstantBuffer.cpp">
+      <Filter>소스 파일\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -77,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>소스 파일\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>소스 파일\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

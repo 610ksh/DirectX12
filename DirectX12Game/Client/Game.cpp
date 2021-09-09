@@ -30,9 +30,26 @@ void Game::Update()
 {
 	GEngine->RenderBegin();
 
-	// TODO!
+	/// TODO!
 	shader->Update(); // 쉐이더를 먼저 업데이트
-	mesh->Render(); // 메시를 Render
+
+	{
+		// Vec4 짜리 offset 변수 1개있는 구조체
+		Transform t;
+		// 삼각형의 x값 위치에 0.75 칼라 red값에 0.75가 더해질거임
+		t.offset = Vec4(0.75f, 0.f, 0.f, 0.f);
+		mesh->SetTransform(t);
+		mesh->Render();
+	}
+
+	{
+		// Vec4 짜리 offset 변수 1개있는 구조체
+		Transform t;
+		// 삼각형의 y값 위치에 0.75 칼라 green값에 0.75가 더해질거임
+		t.offset = Vec4(0.0f, 0.75f, 0.f, 0.f);
+		mesh->SetTransform(t);
+		mesh->Render();
+	}
 
 	GEngine->RenderEnd();
 }

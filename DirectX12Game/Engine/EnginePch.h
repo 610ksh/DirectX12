@@ -71,6 +71,12 @@ struct Vertex
 	Vec4 color;
 };
 
+
+struct Transform
+{
+	Vec4 offset;
+};
+
 // 자주 사용하는 함수 패턴을 매크로로 묶자
 #define DEVICE GEngine->GetDevice()->GetDevice()
 #define	CMD_LIST GEngine->GetCmdQueue()->GetCmdList()

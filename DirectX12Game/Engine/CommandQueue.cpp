@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CommandQueue.h"
 #include "SwapChain.h"
+#include "Engine.h"
 
 CommandQueue::~CommandQueue()
 {
@@ -78,6 +79,10 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 		_swapChain->GetBackRTVBuffer().Get(),
 		D3D12_RESOURCE_STATE_PRESENT, // 화면 출력
 		D3D12_RESOURCE_STATE_RENDER_TARGET); // 외주 결과물
+
+	/// 루트 시그니처 추가.
+	_cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
+	GEngine->GetCB()->Clear(); // 시작전 ConstantBuffer 초기화 먼저 해주자.
 
 	// 위에서 만든 배리어를 List에 넣음
 	_cmdList->ResourceBarrier(1, &barrier);

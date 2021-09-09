@@ -22,7 +22,7 @@
 - [x] 2021.06.07 최초 프로젝트 설정 및 셋팅 / https://blog.naver.com/610ksh/222388342098
 - [x] 2021.06.08 장치 초기화 / https://blog.naver.com/610ksh/222389757864
 - [x] 2021.09.08 삼각형 띄우기 / https://blog.naver.com/610ksh/222392496872
-- [ ] Constant Buffer
+- [x] Constant Buffer (2021.09.09) / https://blog.naver.com/610ksh/222415510639
 - [ ] Root Signature
 - [ ] Index Buffer
 - [ ] Texture Buffer
@@ -45,8 +45,9 @@
 ### 2. 삼각형 띄우기
 ![Image](Git_Resources/Chapter1/triangle.png)
 
-### 3. x
-![]()
+### 3. Constant Buffer를 이용한 삼각형 띄우기
+![Image](Git_Resources/Chapter1/triangle2.png)
+![Image](Git_Resources/Chapter1/triangle2-2.png)
 
 ---
 # 🎨Chapter2. Component

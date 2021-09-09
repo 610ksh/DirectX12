@@ -42,6 +42,21 @@ void Mesh::Render()
 	CMD_LIST->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// 어떤 버퍼를 사용할지 설정
 	CMD_LIST->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
+
+	/// TODO
+	// 1) GPU 램에 있는 Buffer에 데이터를 밀어 넣어줌 (세팅)
+	// 2) 그 Buffer의 주소를 GPU에 있는 register(b0,b1등등)에다가 전송시켜서 연결지음.
+	// ex) CMD_LIST->SetGraphicsRootConstantBufferView(0, ??) 형태임.
+	// => ConstantBuffer 클래스에서 위의 내용을 처리했음.
+
+	/// TODO 위의 내용 요약
+	// 1) Buffer에다가 데이터 세팅
+	// 2) Buffer의 주소를 register에다가 전송
+
+	// (연결지을 레지스터 번호, 복사할 데이터값, 그 크기)
+	GEngine->GetCB()->PushData(0, &_transform, sizeof(_transform));
+	GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform));
+
 	// 실제로 화면에 그림
 	CMD_LIST->DrawInstanced(_vertexCount, 1, 0, 0);
 }
