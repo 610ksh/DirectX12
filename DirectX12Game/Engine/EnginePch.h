@@ -52,9 +52,26 @@ using Vec3 = XMFLOAT3;
 using Vec4 = XMFLOAT4;
 using Matrix = XMMATRIX;
 
+
+enum class CBV_REGISTER
+{
+	b0,
+	b1,
+	b2,
+	b3,
+	b4,
+
+	END // ★개수로 이용할 수 있음.
+}; // MAXCOUNT, COUNT 등으로 이용한다고 함.
+
+
 enum
 {
-	SWAP_CHAIN_BUFFER_COUNT = 2
+	SWAP_CHAIN_BUFFER_COUNT = 2,
+	CBV_REGISTER_COUNT = CBV_REGISTER::END,
+
+	// 일단은 CBV_REGISTER값으로 똑같이 사용하자. 달라질 수 있음.
+	REGISTER_COUNT = CBV_REGISTER::END, // 총 레지스터 개수
 };
 
 struct WindowInfo

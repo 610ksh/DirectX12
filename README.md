@@ -49,6 +49,9 @@
 ![Image](Git_Resources/Chapter1/triangle2.png)
 ![Image](Git_Resources/Chapter1/triangle2-2.png)
 
+### 4. Descriptor table
+![Image](Git_Resources/Chapter1/TableDescriptorHeap.png)
+
 ---
 # 🎨Chapter2. Component
 ## Lecture1. 시작하기

@@ -83,6 +83,17 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 	/// 루트 시그니처 추가.
 	_cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
 	GEngine->GetCB()->Clear(); // 시작전 ConstantBuffer 초기화 먼저 해주자.
+	
+	/// DescriptorHeap 관련 추가
+	GEngine->GetTableDescHeap()->Clear(); // Table도 초기화
+	// 기존에 만들어둔 DescriptorHeap을 통째로 가져옴. _descHeap을 받아오는거임.
+	ID3D12DescriptorHeap* descHeap = GEngine->GetTableDescHeap()->GetDescriptorHeap().Get();
+	// ★ SetDescriptorHeaps 은 매우 느린 함수라서 렌더할때 딱 1번만 실행되도록 한다.
+	// (전체) DescriptorHeaps 개수와 다음 인자로 만들어둔 descHeap을 지정함. 즉, 어떤 힙을 사용할지 지정하는 역할을 담당.
+	// 참고로 cmdList로 descHeap을 먼저 선행으로 지정해줘야한다. (순서 주의)
+	// 그 다음에 비로소 레지스터 쪽으로 위로 올려보내는 SetGraphicsRootDescriptorTable 함수가 실행되어야 한다.
+	_cmdList->SetDescriptorHeaps(1, &descHeap); // 1개의 큰 DescriptorHeaps를 지정함.
+
 
 	// 위에서 만든 배리어를 List에 넣음
 	_cmdList->ResourceBarrier(1, &barrier);

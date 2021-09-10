@@ -44,22 +44,39 @@ void Mesh::Render()
 	// 어떤 버퍼를 사용할지 설정
 	CMD_LIST->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
 
-	/// TODO
+	/// 기존의 방식 ConstantBuffer 방식
 	// 1) GPU 램에 있는 Buffer에 데이터를 밀어 넣어줌 (세팅)
 	// 2) 그 Buffer의 주소를 GPU에 있는 register(b0,b1등등)에다가 전송시켜서 연결지음.
 	// ex) CMD_LIST->SetGraphicsRootConstantBufferView(0, ??) 형태임.
 	// => ConstantBuffer 클래스에서 위의 내용을 처리했음.
 
-	/// TODO 위의 내용 요약
-	// 1) Buffer에다가 데이터 세팅
-	// 2) Buffer의 주소를 register에다가 전송
+	/// TODO, 우리가 여기서 처리해야하는 내용
+	// 1) Buffer에다가 데이터 세팅 (PushData로 함)
+	// 2) TableDescriptorHeap에다가 CBV(Heap) 내용을 그대로 copy함 (CopyDescriptors)
+	// 3) 모든 세팅이 끝났으면 TableDescriptorHeap을 Commit한다. (레지스터로 올려보냄)
 
 	// (연결지을 레지스터 번호, 복사할 데이터값, 그 크기)
 	// 이 부분에서 쉐이더 코드의 0과 1이 결정됨. 첫번째 4바이트, 2번째 4바이트
 	// ※ 넘기는 transform이 같은 변수이기 때문에 결국 1개의 transform을 가지고,
 	// 2개의 변수, 위치값과 색상값을 변경하고 있음. 그래서 독립적으로 보이지 않은거임.
-	GEngine->GetCB()->PushData(0, &_transform, sizeof(_transform)); // 위치값 조절
-	GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform)); // 색상값 조절
+	{
+		// 위치값 조절
+		// 1)
+		D3D12_CPU_DESCRIPTOR_HANDLE handle = GEngine->GetCB()->PushData(0, &_transform, sizeof(_transform));
+		// 2)
+		GEngine->GetTableDescHeap()->SetCBV(handle, CBV_REGISTER::b0);
+	}
+	{
+		//GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform)); // 색상값 조절
+		// 색상값 조절
+		// 1)
+		D3D12_CPU_DESCRIPTOR_HANDLE handle = GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform));
+		// 2)
+		GEngine->GetTableDescHeap()->SetCBV(handle, CBV_REGISTER::b1);
+	}
+
+	// 3) 최종적으로 DescriptorHeap과 레지스터를 연결지음
+	GEngine->GetTableDescHeap()->CommitTable();
 	
 	// 실제로 화면에 그림
 	CMD_LIST->DrawInstanced(_vertexCount, 1, 0, 0);

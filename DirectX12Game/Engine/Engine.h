@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "Shader.h" // 클라이언트쪽에서 필요하기 떄문에 넣어줌. (Game.cpp)
 #include "ConstantBuffer.h"
+#include "TableDescriptorHeap.h"
 
 class Engine
 {
@@ -23,6 +24,7 @@ public:
 	shared_ptr<SwapChain> GetSwapChain() { return _swapChain; };
 	shared_ptr<RootSignature> GetRootSignature() { return _rootSignature; };
 	shared_ptr<ConstantBuffer> GetCB() { return _cb; };
+	shared_ptr<TableDescriptorHeap> GetTableDescHeap() { return _tableDescHeap; }
 
 public:
 	// 요청사항을 CommandQueue에 넣어주는것
@@ -38,10 +40,11 @@ private:
 	D3D12_VIEWPORT	_viewport = {};
 	D3D12_RECT		_scissorRect = {};
 
-	// 장치 초기화에 필요한 클래스 변수 4총사, shared_ptr로 선언, 전방선언
+	// 장치 초기화에 필요한 클래스 변수 4총사, shared_ptr로 선언, 전방선언.
 	shared_ptr<Device> _device;
 	shared_ptr<CommandQueue> _cmdQueue;
 	shared_ptr<SwapChain> _swapChain;
 	shared_ptr<RootSignature> _rootSignature;
 	shared_ptr<ConstantBuffer> _cb; // ConstantBuffer
+	shared_ptr<TableDescriptorHeap> _tableDescHeap;
 };

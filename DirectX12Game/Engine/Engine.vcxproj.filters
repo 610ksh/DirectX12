@@ -49,6 +49,9 @@
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>소스 파일\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="TableDescriptorHeap.cpp">
+      <Filter>소스 파일\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -82,6 +85,9 @@
       <Filter>소스 파일\Resource</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
+      <Filter>소스 파일\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="TableDescriptorHeap.h">
       <Filter>소스 파일\Engine</Filter>
     </ClInclude>
   </ItemGroup>
