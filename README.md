@@ -22,8 +22,8 @@
 - [x] 최초 프로젝트 설정 및 셋팅 (2021.06.07) / https://blog.naver.com/610ksh/222388342098
 - [x] 장치 초기화 (2021.06.08) / https://blog.naver.com/610ksh/222389757864
 - [x] 삼각형 띄우기 (2021.09.08) / https://blog.naver.com/610ksh/222392496872
-- [x] Constant Buffer (2021.09.09) / https://blog.naver.com/610ksh/222415510639
-- [ ] Root Signature
+- [x] Constant Buffer View(CBV) (2021.09.09) / https://blog.naver.com/610ksh/222415510639
+- [x] Descriptor Table(DescriptorHeap) (2021.09.10) / https://blog.naver.com/610ksh/222417967521
 - [ ] Index Buffer
 - [ ] Texture Buffer
 - [ ] Depth Stencil View
