@@ -27,21 +27,25 @@ void Mesh::Init(vector<Vertex>& vec)
 	// gpu 공간에 데이터를 복사하는 과정(Map, Unmap)
 	void* vertexDataBuffer = nullptr; // 임시 데이터 버퍼
 	CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
-	_vertexBuffer->Map(0, &readRange, &vertexDataBuffer); // gpu 공간과 연결.
+	_vertexBuffer->Map(0, &readRange, &vertexDataBuffer); // gpu 공간의 _vertexBuffer를 vertexDataBuffer로 연결
+
+	// Game에서 넘어온 정점들이 담긴 vec의 시작주소에 접근하여
+	// bufferSize만큼씩 끊어서 vertexDataBuffer(GPU)가 가리키고 있는 곳으로 복사. 3개의 정점
 	::memcpy(vertexDataBuffer, &vec[0], bufferSize); // gpu쪽으로 실제 복사되어 넘어가는 함수
 	_vertexBuffer->Unmap(0, nullptr); // gpu 공간과 연결해제
 
 	// Initialize the vertex buffer view.
-	_vertexBufferView.BufferLocation = _vertexBuffer->GetGPUVirtualAddress();
+	_vertexBufferView.BufferLocation = _vertexBuffer->GetGPUVirtualAddress(); // GPU쪽 주소도 가져옴
 	_vertexBufferView.StrideInBytes = sizeof(Vertex); // 정점 1개 크기
 	_vertexBufferView.SizeInBytes = bufferSize; // 버퍼의 크기	
 }
 
 void Mesh::Render()
 {
+	/// IA 시리즈, Input Assembler
 	// 삼각형리스트 형태로 만들거
 	CMD_LIST->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	// 어떤 버퍼를 사용할지 설정
+	// 어떤 버퍼를 사용할지 설정. vertexBufferView에는 3개의 정점이 있을거임
 	CMD_LIST->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
 
 	/// 기존의 방식 ConstantBuffer 방식

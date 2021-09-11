@@ -10,7 +10,7 @@ public:
 	// setter
 	void SetTransform(const Transform& t) { _transform = t; }
 private:
-	ComPtr<ID3D12Resource>		_vertexBuffer;
+	ComPtr<ID3D12Resource>		_vertexBuffer; // GPUÂÊ º¯¼ö
 	D3D12_VERTEX_BUFFER_VIEW	_vertexBufferView = {};
 	uint32 _vertexCount = 0;
 
