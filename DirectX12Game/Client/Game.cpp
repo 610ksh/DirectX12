@@ -12,6 +12,7 @@ void Game::Init(const WindowInfo & info)
 	GEngine->Init(info);
 
 	/// 3개의 정점 정보
+	// 지금은 정점을 하나만 넘기는 형태.
 	vector<Vertex> vec(3);
 	vec[0].pos = Vec3(0.f, 0.5f, 0.5f);
 	vec[0].color = Vec4(1.f, 0.f, 0.f, 1.f);
