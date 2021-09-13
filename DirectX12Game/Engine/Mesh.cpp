@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Engine.h"
 
+/// discarded version, only study
 void Mesh::Init(vector<Vertex>& vec)
 {
 	// 정점 수 
@@ -40,14 +41,25 @@ void Mesh::Init(vector<Vertex>& vec)
 	_vertexBufferView.SizeInBytes = bufferSize; // 버퍼의 크기	
 }
 
+//////////////////////////////////////////
+
+/// 이제 VertexBuffer와 IndexBuffer를 넘겨줘야함.
+void Mesh::Init(const vector<Vertex>& vertexBuffer, const vector<uint32>& indexBuffer)
+{
+	CreateVertexBuffer(vertexBuffer);
+	CreateIndexBuffer(indexBuffer);
+}
+
 void Mesh::Render()
 {
-	/// IA 시리즈, Input Assembler
-	// 삼각형리스트 형태로 만들거
+	/// IA 시리즈, Input Assembler stage
+	// 삼각형리스트 형태로 만들거를 선언함. (Input Assembler 단계)
 	CMD_LIST->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// 어떤 버퍼를 사용할지 설정. vertexBufferView에는 3개의 정점이 있을거임
-	CMD_LIST->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
-
+	// Slot: (0~15)
+	CMD_LIST->IASetVertexBuffers(0, 1, &_vertexBufferView); // VertexBuffer
+	CMD_LIST->IASetIndexBuffer(&_indexBufferView); // IndexBuffer
+	
 	/// 기존의 방식 ConstantBuffer 방식
 	// 1) GPU 램에 있는 Buffer에 데이터를 밀어 넣어줌 (세팅)
 	// 2) 그 Buffer의 주소를 GPU에 있는 register(b0,b1등등)에다가 전송시켜서 연결지음.
@@ -82,6 +94,66 @@ void Mesh::Render()
 	// 3) 최종적으로 DescriptorHeap과 레지스터를 연결지음
 	GEngine->GetTableDescHeap()->CommitTable();
 	
-	// 실제로 화면에 그림
-	CMD_LIST->DrawInstanced(_vertexCount, 1, 0, 0);
+	/// 실제로 화면에 그림
+	// VertexBuffer 방식으로 그리는 함수
+	// CMD_LIST->DrawInstanced(_vertexCount, 1, 0, 0);
+	// IndexBuffer를 이용해서 그리는 함수
+	CMD_LIST->DrawIndexedInstanced(_indexCount, 1, 0, 0, 0);
+}
+
+
+void Mesh::CreateVertexBuffer(const vector<Vertex>& buffer)
+{
+	_vertexCount = static_cast<uint32>(buffer.size());
+	uint32 bufferSize = _vertexCount * sizeof(Vertex);
+
+	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
+
+	DEVICE->CreateCommittedResource(
+		&heapProperty,
+		D3D12_HEAP_FLAG_NONE,
+		&desc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&_vertexBuffer));
+
+	// Copy the triangle data to the vertex buffer.
+	void* vertexDataBuffer = nullptr;
+	CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
+	_vertexBuffer->Map(0, &readRange, &vertexDataBuffer);
+	::memcpy(vertexDataBuffer, &buffer[0], bufferSize);
+	_vertexBuffer->Unmap(0, nullptr);
+
+	// Initialize the vertex buffer view.
+	_vertexBufferView.BufferLocation = _vertexBuffer->GetGPUVirtualAddress();
+	_vertexBufferView.StrideInBytes = sizeof(Vertex); // 정점 1개 크기
+	_vertexBufferView.SizeInBytes = bufferSize; // 버퍼의 크기	
+}
+
+void Mesh::CreateIndexBuffer(const vector<uint32>& buffer)
+{
+	_indexCount = static_cast<uint32>(buffer.size());
+	uint32 bufferSize = _indexCount * sizeof(uint32);
+
+	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
+
+	DEVICE->CreateCommittedResource(
+		&heapProperty,
+		D3D12_HEAP_FLAG_NONE,
+		&desc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&_indexBuffer));
+
+	void* indexDataBuffer = nullptr;
+	CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
+	_indexBuffer->Map(0, &readRange, &indexDataBuffer);
+	::memcpy(indexDataBuffer, &buffer[0], bufferSize);
+	_indexBuffer->Unmap(0, nullptr);
+
+	_indexBufferView.BufferLocation = _indexBuffer->GetGPUVirtualAddress();
+	_indexBufferView.Format = DXGI_FORMAT_R32_UINT; // uint16으로 할거면 DXGI_FORMAT_R16_UINT
+	_indexBufferView.SizeInBytes = bufferSize;
 }

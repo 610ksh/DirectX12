@@ -3,7 +3,7 @@
 #include "Engine.h"
 
 // 하나의 메시와 쉐이더 객체를 하나 생성함
-shared_ptr<Mesh> mesh = make_shared<Mesh>();
+shared_ptr<Mesh> mesh = make_shared<Mesh>(); // 메시를 딱 1개만 생성함
 shared_ptr<Shader> shader = make_shared<Shader>();
 
 void Game::Init(const WindowInfo & info)
@@ -11,18 +11,47 @@ void Game::Init(const WindowInfo & info)
 	// 엔진 초기화
 	GEngine->Init(info);
 
-	/// 3개의 정점 정보
-	// 지금은 정점을 하나만 넘기는 형태.
-	vector<Vertex> vec(3);
-	vec[0].pos = Vec3(0.f, 0.5f, 0.5f);
+	/// 정점 정보
+	// 지금은 정점을 하나만 넘기는 형태. 메시에 넘기는 데이터
+	/*vector<Vertex> vec(6);
+	vec[0].pos = Vec3(-0.5f, 0.5f, 0.5f);
 	vec[0].color = Vec4(1.f, 0.f, 0.f, 1.f);
-	vec[1].pos = Vec3(0.5f, -0.5f, 0.5f);
-	vec[1].color = Vec4(0.f, 1.0f, 0.f, 1.f);
-	vec[2].pos = Vec3(-0.5f, -0.5f, 0.5f);
+	vec[1].pos = Vec3(0.5f, 0.5f, 0.5f);
+	vec[1].color = Vec4(0.f, 1.f, 0.f, 1.f);
+	vec[2].pos = Vec3(0.5f, -0.5f, 0.5f);
 	vec[2].color = Vec4(0.f, 0.f, 1.f, 1.f);
 
+	vec[3].pos = Vec3(0.5f, -0.5f, 0.5f);
+	vec[3].color = Vec4(0.f, 0.f, 1.f, 1.f);
+	vec[4].pos = Vec3(-0.5f, -0.5f, 0.5f);
+	vec[4].color = Vec4(0.f, 1.f, 0.f, 1.f);
+	vec[5].pos = Vec3(-0.5f, 0.5f, 0.5f);
+	vec[5].color = Vec4(1.f, 0.f, 0.f, 1.f);*/
+
+	vector<Vertex> vec(4);
+	vec[0].pos = Vec3(-0.5f, 0.5f, 0.5f);
+	vec[0].color = Vec4(1.f, 0.f, 0.f, 1.f);
+	vec[1].pos = Vec3(0.5f, 0.5f, 0.5f);
+	vec[1].color = Vec4(0.f, 1.f, 0.f, 1.f);
+	vec[2].pos = Vec3(0.5f, -0.5f, 0.5f);
+	vec[2].color = Vec4(0.f, 0.f, 1.f, 1.f);
+	vec[3].pos = Vec3(-0.5f, -0.5f, 0.5f);
+	vec[3].color = Vec4(0.f, 1.f, 0.f, 1.f);
+
+	vector<uint32> indexVec;
+	{
+		indexVec.push_back(0);
+		indexVec.push_back(1);
+		indexVec.push_back(2);
+	}
+	{
+		indexVec.push_back(0);
+		indexVec.push_back(2);
+		indexVec.push_back(3);
+	}
+
 	// 메시 초기화
-	mesh->Init(vec);
+	mesh->Init(vec, indexVec);
 
 	// shader 초기화 -> HLSL 파일 인식. (VertexShader, PixelShader 생성)
 	shader->Init(L"..\\Resources\\Shader\\default.hlsli");
@@ -53,17 +82,7 @@ void Game::Update()
 		// Vec4 짜리 offset 변수 1개있는 구조체
 		Transform t;
 		// 삼각형의 x값 위치에 0.75 칼라 red값에 0.75가 더해질거임
-		t.offset = Vec4(0.75f, 0.f, 0.f, 0.f);
-		mesh->SetTransform(t);
-		mesh->Render();
-	}
-
-
-	{
-		// Vec4 짜리 offset 변수 1개있는 구조체
-		Transform t;
-		// 삼각형의 y값 위치에 0.75 칼라 green값에 0.75가 더해질거임
-		t.offset = Vec4(0.0f, 0.75f, 0.f, 0.f);
+		t.offset = Vec4(0.f, 0.f, 0.f, 0.f);
 		mesh->SetTransform(t);
 		mesh->Render();
 	}

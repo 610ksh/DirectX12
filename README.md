@@ -24,7 +24,7 @@
 - [x] 삼각형 띄우기 (2021.09.08) / https://blog.naver.com/610ksh/222392496872
 - [x] Constant Buffer View(CBV) (2021.09.09) / https://blog.naver.com/610ksh/222415510639
 - [x] Descriptor Table(DescriptorHeap) (2021.09.10) / https://blog.naver.com/610ksh/222417967521
-- [ ] Index Buffer
+- [x] Index Buffer (2021.09.13) / https://blog.naver.com/610ksh/222418610083
 - [ ] Texture Buffer
 - [ ] Depth Stencil View
 - [ ] 미정
@@ -42,15 +42,22 @@
 ### 1. 프로젝트 셋팅 & 장치 초기화 완료(초기화면)
 ![Image](Git_Resources/Chapter1/초기화.png)
 
-### 2. 삼각형 띄우기
+### 2. 삼각형 띄우기 (VertexBuffer, VertexBufferView = VBV)
 ![Image](Git_Resources/Chapter1/triangle.png)
 
-### 3. Constant Buffer를 이용한 삼각형 띄우기
+### 3. Constant Buffer (ConstantBufferView)
 ![Image](Git_Resources/Chapter1/triangle2.png)
 ![Image](Git_Resources/Chapter1/triangle2-2.png)
 
 ### 4. Descriptor table
 ![Image](Git_Resources/Chapter1/TableDescriptorHeap.png)
+
+### 5. Index Buffer (IndexBufferView)
+![Image](Git_Resources/Chapter1/IndexBuffer.png)
+
+### 6. Texture Mapping
+![Image]()
+
 
 ---
 # 🎨Chapter2. Component
