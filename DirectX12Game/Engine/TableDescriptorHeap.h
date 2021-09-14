@@ -13,7 +13,9 @@ public:
 	void Clear();
 	// Init에서 만든 DescriptorHeap에 이전에 만든 DescriptorHeap을 Copy해옴
 	void SetCBV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, CBV_REGISTER reg);
-	
+	// Texture를 위한 Samepler Resource View도 똑같은 방식으로 함.
+	void SetSRV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, SRV_REGISTER reg);
+
 	// GPU 레지스터와 만들어둔 DescriptorHeap의 주소로 연결. 위로 올려보내는 예약.
 	void CommitTable(); 
 
@@ -22,9 +24,10 @@ public:
 
 	// CPUHandle 값 계산. 핸들 주소 계산하는 함수
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(CBV_REGISTER reg);
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(SRV_REGISTER reg);
 private:
 	// 위의 GetCPUHandle 함수 오버로딩
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(uint32 reg);
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUHandle(uint8 reg);
 
 private:
 	/// 기존의 DescriptorHeap 변수와 같은 용도

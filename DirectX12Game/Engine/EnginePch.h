@@ -1,5 +1,8 @@
 #pragma once
 
+// std::byte 사용하지 않음
+#define _HAS_STD_BYTE 0 // 이거 넣어주면 됨.
+
 // 각종 include
 #include <windows.h>
 #include <tchar.h>
@@ -10,6 +13,10 @@
 #include <list>
 #include <map>
 using namespace std;
+
+// C++17의 파일시스템 추가. (미리 C++17 설정해야함)
+#include <filesystem>
+namespace fs = std::filesystem; // fs라고 이름을 줄이자
 
 /*
 	d3dx12.h는 특별하다.
@@ -32,11 +39,22 @@ using namespace DirectX;
 using namespace DirectX::PackedVector;
 using namespace Microsoft::WRL;
 
+// Texture를 위한 외부 헤더파일 추가.
+#include <DirectXTex/DirectXTex.h>
+#include <DirectXTex/DirectXTex.inl>
+
 // 각종 lib
 #pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
+
+// Texture를 위한 외부 lib 파일 추가.
+#ifdef _DEBUG
+#pragma comment(lib, "DirectXTex\\DirectXTex_debug.lib")
+#else
+#pragma comment(lib, "DirectXTex\\DirectXTex.lib")
+#endif
 
 // 각종 typedef
 using int8 = __int8;
@@ -53,7 +71,8 @@ using Vec4 = XMFLOAT4;
 using Matrix = XMMATRIX;
 
 
-enum class CBV_REGISTER
+// 사이즈를 uint8로 줄임. 기본은 int임.
+enum class CBV_REGISTER : uint8
 {
 	b0,
 	b1,
@@ -64,14 +83,23 @@ enum class CBV_REGISTER
 	END // ★개수로 이용할 수 있음.
 }; // MAXCOUNT, COUNT 등으로 이용한다고 함.
 
+enum class SRV_REGISTER : uint8
+{
+	t0 = static_cast<uint8>(CBV_REGISTER::END),
+	t1,
+	t2,
+	t3,
+	t4,
+
+	END
+}; // 텍스처를 위한 t0~t4
 
 enum
 {
 	SWAP_CHAIN_BUFFER_COUNT = 2,
 	CBV_REGISTER_COUNT = CBV_REGISTER::END,
-
-	// 일단은 CBV_REGISTER값으로 똑같이 사용하자. 달라질 수 있음.
-	REGISTER_COUNT = CBV_REGISTER::END, // 총 레지스터 개수
+	SRV_REGISTER_COUNT = static_cast<uint8>(SRV_REGISTER::END) - CBV_REGISTER_COUNT,
+	REGISTER_COUNT = CBV_REGISTER_COUNT + SRV_REGISTER_COUNT, // 총 레지스터 개수
 };
 
 struct WindowInfo
@@ -86,6 +114,7 @@ struct Vertex
 {
 	Vec3 pos;
 	Vec4 color;
+	Vec2 uv;
 };
 
 // 물체의 정보
@@ -98,6 +127,7 @@ struct Transform
 // 자주 사용하는 함수 패턴을 매크로로 묶자
 #define DEVICE GEngine->GetDevice()->GetDevice()
 #define	CMD_LIST GEngine->GetCmdQueue()->GetCmdList()
+#define RESOURCE_CMD_LIST	GEngine->GetCmdQueue()->GetResourceCmdList()
 #define ROOT_SIGNATURE GEngine->GetRootSignature()->GetSignature()
 
 // Engine 클래스 전역변수. 일종의 싱글톤 형태. 전방선언까지 해주자.

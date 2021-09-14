@@ -12,9 +12,13 @@ void Shader::Init(const wstring& path)
 	// pipeline에 대한 설명서 제작을 위한 편수
 	D3D12_INPUT_ELEMENT_DESC desc[] =
 	{
-		// 위치값과 색상이 어떤식으로 들어가게 될지 설정해주고 있음.
+		// 위치값과 색상이 어떤식으로 들어가게 될지 설정해주고 있음. (0, 12, 28은 offset임)
+		// pos는 float 3개. 12바이트
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+		// color는 rgba라서 float 4개. 16바이트. -> 12 + 16 = 28 이전까지.
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		// texture는 28부터 시작함. 32비트 2개 사용함 (R32, G32)
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
 	// pipeline에 대한 설명서 내용 기입
@@ -38,7 +42,7 @@ void Shader::Init(const wstring& path)
 void Shader::Update()
 {
 	// Init에서 만들었던 pipelineState를 가지고 파이프라인을 새롭게 설정.
-	CMD_LIST->SetPipelineState(_pipelineState.Get());
+	CMD_LIST->SetPipelineState(_pipelineState.Get()); // GPU에게 일감을 던짐.
 }
 
 

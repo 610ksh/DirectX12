@@ -15,9 +15,13 @@ public:
 	void RenderBegin(const D3D12_VIEWPORT* vp, const D3D12_RECT* rect);
 	void RenderEnd();
 	
+	// 일감을 밀어넣은 뒤, 리소스를 로드하는 명령어를 실행해주는 함수
+	void FlushResourceCommandQueue();
+
 	// getter, 외부에서 CommandQueue를 필요할때 사용하기 위함. _cmdQueue만 있으면 된다.
 	ComPtr<ID3D12CommandQueue> GetCmdQueue() { return _cmdQueue; }
 	ComPtr<ID3D12GraphicsCommandList> GetCmdList() { return _cmdList; }
+	ComPtr<ID3D12GraphicsCommandList> GetResourceCmdList() { return	_resCmdList; }
 
 private:
 	// 크게 보면 CommandQueue와 Fence를 만드는것과 같다.
@@ -29,6 +33,10 @@ private:
 	ComPtr<ID3D12CommandQueue>			_cmdQueue; // 일감을 넣는곳
 	ComPtr<ID3D12CommandAllocator>		_cmdAlloc; // 메모리 할당을 도와줌
 	ComPtr<ID3D12GraphicsCommandList>	_cmdList; // 일감 리스트. gpu에게 한번에 넘겨줌
+
+	// 리소스 전용 커맨드리스트 추가(텍스처)
+	ComPtr<ID3D12CommandAllocator>		_resCmdAlloc;
+	ComPtr<ID3D12GraphicsCommandList>	_resCmdList;
 
 	// Fence : 울타리
 	// CPU / GPU 동기화를 위한 간단한 도구

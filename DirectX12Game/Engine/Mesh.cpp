@@ -77,17 +77,19 @@ void Mesh::Render()
 	// 2개의 변수, 위치값과 색상값을 변경하고 있음. 그래서 독립적으로 보이지 않은거임.
 	{
 		// 위치값 조절
-		// 1)
+		// 1) 데이터 밀어넣고 handle 받아오기
 		D3D12_CPU_DESCRIPTOR_HANDLE handle = GEngine->GetCB()->PushData(0, &_transform, sizeof(_transform));
-		// 2)
+		// 2) SetCBV
 		GEngine->GetTableDescHeap()->SetCBV(handle, CBV_REGISTER::b0);
+		// 3) SetSRV, texture의 핸들을 받아서 우리가 원하는 레지스터에 밀어넣는 부분임. t0이용.
+		GEngine->GetTableDescHeap()->SetSRV(_tex->GetCpuHandle(), SRV_REGISTER::t0);
 	}
 	{
 		//GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform)); // 색상값 조절
 		// 색상값 조절
-		// 1)
+		// 1) 데이터 밀어넣고 handle 받아오기
 		D3D12_CPU_DESCRIPTOR_HANDLE handle = GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform));
-		// 2)
+		// 2) SetCBV
 		GEngine->GetTableDescHeap()->SetCBV(handle, CBV_REGISTER::b1);
 	}
 

@@ -6,6 +6,10 @@
 shared_ptr<Mesh> mesh = make_shared<Mesh>(); // 메시를 딱 1개만 생성함
 shared_ptr<Shader> shader = make_shared<Shader>();
 
+// Texture도 1개만 생성해봄.
+shared_ptr<Texture> texture = make_shared<Texture>();
+
+
 void Game::Init(const WindowInfo & info)
 {
 	// 엔진 초기화
@@ -13,30 +17,19 @@ void Game::Init(const WindowInfo & info)
 
 	/// 정점 정보
 	// 지금은 정점을 하나만 넘기는 형태. 메시에 넘기는 데이터
-	/*vector<Vertex> vec(6);
-	vec[0].pos = Vec3(-0.5f, 0.5f, 0.5f);
-	vec[0].color = Vec4(1.f, 0.f, 0.f, 1.f);
-	vec[1].pos = Vec3(0.5f, 0.5f, 0.5f);
-	vec[1].color = Vec4(0.f, 1.f, 0.f, 1.f);
-	vec[2].pos = Vec3(0.5f, -0.5f, 0.5f);
-	vec[2].color = Vec4(0.f, 0.f, 1.f, 1.f);
-
-	vec[3].pos = Vec3(0.5f, -0.5f, 0.5f);
-	vec[3].color = Vec4(0.f, 0.f, 1.f, 1.f);
-	vec[4].pos = Vec3(-0.5f, -0.5f, 0.5f);
-	vec[4].color = Vec4(0.f, 1.f, 0.f, 1.f);
-	vec[5].pos = Vec3(-0.5f, 0.5f, 0.5f);
-	vec[5].color = Vec4(1.f, 0.f, 0.f, 1.f);*/
-
 	vector<Vertex> vec(4);
 	vec[0].pos = Vec3(-0.5f, 0.5f, 0.5f);
 	vec[0].color = Vec4(1.f, 0.f, 0.f, 1.f);
+	vec[0].uv = Vec2(0.f, 0.f); // (0,0)
 	vec[1].pos = Vec3(0.5f, 0.5f, 0.5f);
 	vec[1].color = Vec4(0.f, 1.f, 0.f, 1.f);
+	vec[1].uv = Vec2(1.f, 0.f); // (1,0)
 	vec[2].pos = Vec3(0.5f, -0.5f, 0.5f);
 	vec[2].color = Vec4(0.f, 0.f, 1.f, 1.f);
+	vec[2].uv = Vec2(1.f, 1.f); // (1,1)
 	vec[3].pos = Vec3(-0.5f, -0.5f, 0.5f);
 	vec[3].color = Vec4(0.f, 1.f, 0.f, 1.f);
+	vec[3].uv = Vec2(0.f, 1.f); // (0,1)
 
 	vector<uint32> indexVec;
 	{
@@ -55,6 +48,9 @@ void Game::Init(const WindowInfo & info)
 
 	// shader 초기화 -> HLSL 파일 인식. (VertexShader, PixelShader 생성)
 	shader->Init(L"..\\Resources\\Shader\\default.hlsli");
+
+	// texture 초기화
+	texture->Init(L"..\\Resources\\Texture\\veigar.jpg");
 	
 	GEngine->GetCmdQueue()->WaitSync();
 }
@@ -79,11 +75,12 @@ void Game::Update()
 		모두를 바꾸는거라는걸 주의하도록 하자.
 	*/
 	{
-		// Vec4 짜리 offset 변수 1개있는 구조체
+		/// 변수 지정 및 설정값 추가
 		Transform t;
-		// 삼각형의 x값 위치에 0.75 칼라 red값에 0.75가 더해질거임
 		t.offset = Vec4(0.f, 0.f, 0.f, 0.f);
 		mesh->SetTransform(t);
+		mesh->SetTexture(texture); // texture 지정
+		/// 최종적으로 Render
 		mesh->Render();
 	}
 

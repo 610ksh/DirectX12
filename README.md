@@ -25,15 +25,21 @@
 - [x] Constant Buffer View(CBV) (2021.09.09) / https://blog.naver.com/610ksh/222415510639
 - [x] Descriptor Table(DescriptorHeap) (2021.09.10) / https://blog.naver.com/610ksh/222417967521
 - [x] Index Buffer (2021.09.13) / https://blog.naver.com/610ksh/222418610083
-- [ ] Texture Buffer
+- [x] Texture Mapping (2021.09.14) / https://blog.naver.com/610ksh/222505298506
 - [ ] Depth Stencil View
-- [ ] 미정
+- [ ] Input & Timer
+- [ ] Material
+- [ ] Component
+- [ ] Scene
+- [ ] Vector & Matrix
+
 
 ## :heavy_check_mark: Languages & Library
 - Visual Studio 2017
 - C++
 - DirectX12
-- d3dx12.h (Helper 클래스)(https://github.com/microsoft/DirectX-Graphics-Samples/blob/master/Libraries/D3D12RaytracingFallback/Include/d3dx12.h)
+- d3dx12.h (Helper 클래스) / https://github.com/microsoft/DirectX-Graphics-Samples/blob/master/Libraries/D3D12RaytracingFallback/Include/d3dx12.h
+- DirectXTex (MS, 이미지 파일 업로드 라이브러리) / https://github.com/microsoft/DirectXTex
 - gitignore : Visual Studio, C++
 
 ---
@@ -56,7 +62,7 @@
 ![Image](Git_Resources/Chapter1/IndexBuffer.png)
 
 ### 6. Texture Mapping
-![Image]()
+![Image](Git_Resources/Chapter1/TextureMapping.png)
 
 
 ---
