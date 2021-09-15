@@ -103,14 +103,23 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 	_cmdList->RSSetViewports(1, vp);
 	_cmdList->RSSetScissorRects(1, rect);
 
-	// 어떤 버퍼에 그림을 그려야할지 설정.
+	/// 어떤 버퍼에 그림을 그려야할지 설정.
 	// Specify the buffers we are going to render to.  // 실제 RTV가 필요함
 	D3D12_CPU_DESCRIPTOR_HANDLE backBufferView = _swapChain->GetBackRTV();
 	
 	// 현재 backbuffer의 rtv를 초기화해준다. 종이를 리셋시켜줌.
 	_cmdList->ClearRenderTargetView(backBufferView, Colors::LightSteelBlue, 0, nullptr);
 
-	_cmdList->OMSetRenderTargets(1, &backBufferView, FALSE, nullptr);
+	/// DepthStencilView
+	D3D12_CPU_DESCRIPTOR_HANDLE depthStencilView = GEngine->GetDepthStencilBuffer()->GetDSVCpuHandle();
+	
+	// OM : Output Merge state, 백버퍼를 넘겨서 그려달라고 요청함.
+	// depthStencilView를 사용했음을 알려줌.
+	_cmdList->OMSetRenderTargets(1, &backBufferView, FALSE, &depthStencilView);
+
+	// depth는 1.0f으로 초기화, stencil은 사용 안하기 때문에 0으로 초기화. 나머지도 0과 nullptr.
+	// 실질적으로 매 프레임마다 DSV를 싸그리 밀어주는 함수.
+	_cmdList->ClearDepthStencilView(depthStencilView, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
 // 백버퍼에 그려진 내용을 화면에 출력하도록 교체해줌.

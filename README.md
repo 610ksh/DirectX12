@@ -26,7 +26,7 @@
 - [x] Descriptor Table(DescriptorHeap) (2021.09.10) / https://blog.naver.com/610ksh/222417967521
 - [x] Index Buffer (2021.09.13) / https://blog.naver.com/610ksh/222418610083
 - [x] Texture Mapping (2021.09.14) / https://blog.naver.com/610ksh/222505298506
-- [ ] Depth Stencil View
+- [x] Depth Stencil View (2021.09.15) / https://blog.naver.com/610ksh/222506519945
 - [ ] Input & Timer
 - [ ] Material
 - [ ] Component
@@ -63,6 +63,9 @@
 
 ### 6. Texture Mapping
 ![Image](Git_Resources/Chapter1/TextureMapping.png)
+
+### 7. Depth Stencil View (Depth Buffer)
+![Image](Git_Resources/Chapter1/DepthStencilView.png)
 
 
 ---

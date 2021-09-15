@@ -57,14 +57,17 @@ void Game::Init(const WindowInfo & info)
 
 void Game::Update()
 {
+	// 전체 렌더링 초기화 및 사전 준비단계.
+	// 렌더링 관련 부분에서 초기화가 필요한 작업을 RenderBegin에서 한다.
+	// 현재는 _cmdQueue->RenderBegin(&_viewport, &_scissorRect) 코드 뿐이다.
 	GEngine->RenderBegin();
 
-	/// TODO!
-	
 	// 쉐이더를 먼저 업데이트
-	// 한 프레임에 하나의 렌더링파이프라인을 만드는듯.
-	// 한 프레임이 끝나면 다시 하나의 렌더링 파이프라인을 만들고.
+	// 한 프레임에 하나의 전체 렌더링 파이프라인을 만듦.
+	// 매 프레임마다 새롭게 생성하는 구조임.
 	shader->Update();
+	
+	/// TODO!
 	
 	/*
 		<Notice>
@@ -77,12 +80,27 @@ void Game::Update()
 	{
 		/// 변수 지정 및 설정값 추가
 		Transform t;
-		t.offset = Vec4(0.f, 0.f, 0.f, 0.f);
+		t.offset = Vec4(0.f, 0.f, 0.2f, 0.f);
 		mesh->SetTransform(t);
 		mesh->SetTexture(texture); // texture 지정
+
 		/// 최종적으로 Render
 		mesh->Render();
 	}
 
+	{
+		/// 변수 지정 및 설정값 추가
+		Transform t;
+		t.offset = Vec4(0.25f, 0.25f, 0.f, 0.f);
+		mesh->SetTransform(t);
+		mesh->SetTexture(texture); // texture 지정
+
+		/// 최종적으로 Render
+		mesh->Render();
+	}
+
+	// 전체 렌더링 작업 완료.
+	// 내부적으로 다음 프레임으로 가기전에 끝나기를 기다린다. WaitSync();
+	// 현재는_cmdQueue->RenderEnd() 코드 뿐이다.
 	GEngine->RenderEnd();
 }

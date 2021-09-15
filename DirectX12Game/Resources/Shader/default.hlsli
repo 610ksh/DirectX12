@@ -43,6 +43,7 @@ VS_OUT VS_Main(VS_IN input)
 
 	// 일단 그냥 있는 그대로 넘김
 	output.pos = float4(input.pos, 1.f);
+	output.pos += offset0; // offset0으로 조정
 	output.color = input.color;
 	output.uv = input.uv;
 
