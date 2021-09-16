@@ -130,5 +130,8 @@ struct Transform
 #define RESOURCE_CMD_LIST	GEngine->GetCmdQueue()->GetResourceCmdList()
 #define ROOT_SIGNATURE GEngine->GetRootSignature()->GetSignature()
 
+#define INPUT				GEngine->GetInput()
+#define DELTA_TIME			GEngine->GetTimer()->GetDeltaTime()
+
 // Engine 클래스 전역변수. 일종의 싱글톤 형태. 전방선언까지 해주자.
 extern unique_ptr<class Engine> GEngine; // 외부에서 접근가능(extern)

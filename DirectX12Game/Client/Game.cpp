@@ -57,6 +57,9 @@ void Game::Init(const WindowInfo & info)
 
 void Game::Update()
 {
+	// 맨앞에 일단 넣음.
+	GEngine->Update();
+
 	// 전체 렌더링 초기화 및 사전 준비단계.
 	// 렌더링 관련 부분에서 초기화가 필요한 작업을 RenderBegin에서 한다.
 	// 현재는 _cmdQueue->RenderBegin(&_viewport, &_scissorRect) 코드 뿐이다.
@@ -79,8 +82,20 @@ void Game::Update()
 	*/
 	{
 		/// 변수 지정 및 설정값 추가
-		Transform t;
-		t.offset = Vec4(0.f, 0.f, 0.2f, 0.f);
+		static Transform t = {}; // 한번 선언하면 끝까지 유지됨.
+		
+		// 키를 누르면 이동하게됨. 1씩.
+		// 근데 만약에 우리가 W를 1초간 눌렀고, 1초동안 프레임이 100번 돌아가면
+		// 갑자기 100씩 이동하게 된다.
+		if (INPUT->GetButton(KEY_TYPE::W))
+			t.offset.y += 1.f * DELTA_TIME;
+		if (INPUT->GetButton(KEY_TYPE::S))
+			t.offset.y -= 1.f * DELTA_TIME;
+		if (INPUT->GetButton(KEY_TYPE::A))
+			t.offset.x -= 1.f * DELTA_TIME;
+		if (INPUT->GetButton(KEY_TYPE::D))
+			t.offset.x += 1.f * DELTA_TIME;
+
 		mesh->SetTransform(t);
 		mesh->SetTexture(texture); // texture 지정
 
@@ -88,7 +103,7 @@ void Game::Update()
 		mesh->Render();
 	}
 
-	{
+	/*{
 		/// 변수 지정 및 설정값 추가
 		Transform t;
 		t.offset = Vec4(0.25f, 0.25f, 0.f, 0.f);
@@ -97,7 +112,7 @@ void Game::Update()
 
 		/// 최종적으로 Render
 		mesh->Render();
-	}
+	}*/
 
 	// 전체 렌더링 작업 완료.
 	// 내부적으로 다음 프레임으로 가기전에 끝나기를 기다린다. WaitSync();

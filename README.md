@@ -27,7 +27,7 @@
 - [x] Index Buffer (2021.09.13) / https://blog.naver.com/610ksh/222418610083
 - [x] Texture Mapping (2021.09.14) / https://blog.naver.com/610ksh/222505298506
 - [x] Depth Stencil View (2021.09.15) / https://blog.naver.com/610ksh/222506519945
-- [ ] Input & Timer
+- [x] Input & Timer (2021.09.16) / https://blog.naver.com/610ksh/222508029404
 - [ ] Material
 - [ ] Component
 - [ ] Scene
@@ -70,26 +70,25 @@
 
 ---
 # 🎨Chapter2. Component
-## Lecture1. 시작하기
-### 1. x
+## 2-1. Input & Timer
+![Image](Git_Resources/Chapter2/Input&Timer.gif)
+
+### 2-2. x
 ![]()
 
-### 2. x
-![]()
-
-### 3. x
+### 2-3. x
 ![]()
 
 ---
 # 🎨Chapter3. Vector & Matrix
 ## Lecture1. 시작하기
-### 1. x
+### 3-1. x
 ![]()
 
-### 2. x
+### 3-2. x
 ![]()
 
-### 3. x
+### 3-3. x
 ![]()
 
 ---

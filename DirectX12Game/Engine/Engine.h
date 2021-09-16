@@ -11,6 +11,10 @@
 #include "Texture.h"
 #include "DepthStencilBuffer.h"
 
+// 장치 관련
+#include "Input.h"
+#include "Timer.h"
+
 class Engine
 {
 public:
@@ -18,6 +22,9 @@ public:
 	// public으로 선언해줘야한다.
 	void Init(const WindowInfo& info);
 	void Render();
+
+public:
+	void Update();
 
 public:
 	// 다른곳에서 각 클래스들이 필요할때마다 가져다 쓸 예정. Engine을 접근하면 다 있음.
@@ -29,6 +36,9 @@ public:
 	shared_ptr<TableDescriptorHeap> GetTableDescHeap() { return _tableDescHeap; }
 	shared_ptr<DepthStencilBuffer> GetDepthStencilBuffer() { return _depthStencilBuffer; }
 
+	shared_ptr<Input> GetInput() { return _input; }
+	shared_ptr<Timer> GetTimer() { return _timer; }
+
 public:
 	// 요청사항을 CommandQueue에 넣어주는것
 	void RenderBegin();
@@ -38,17 +48,23 @@ public:
 	void ResizeWindow(int32 width, int32 height);
 
 private:
+	void ShowFps();
+
+private:
 	// 그려질 화면 크기 관련 3총사
 	WindowInfo		_window;
 	D3D12_VIEWPORT	_viewport = {};
 	D3D12_RECT		_scissorRect = {};
 
-	// 장치 초기화에 필요한 클래스 변수 4총사, shared_ptr로 선언, 전방선언.
-	shared_ptr<Device> _device;
-	shared_ptr<CommandQueue> _cmdQueue;
-	shared_ptr<SwapChain> _swapChain;
-	shared_ptr<RootSignature> _rootSignature;
-	shared_ptr<ConstantBuffer> _cb; // ConstantBuffer
-	shared_ptr<TableDescriptorHeap> _tableDescHeap;
-	shared_ptr<DepthStencilBuffer> _depthStencilBuffer;
+	// 장치 초기화에 필요한 클래스 변수 4총사, shared_ptr로 선언.
+	shared_ptr<Device> _device = make_shared<Device>();
+	shared_ptr<CommandQueue> _cmdQueue = make_shared<CommandQueue>();
+	shared_ptr<SwapChain> _swapChain = make_shared<SwapChain>();
+	shared_ptr<RootSignature> _rootSignature = make_shared<RootSignature>();
+	shared_ptr<ConstantBuffer> _cb = make_shared<ConstantBuffer>();
+	shared_ptr<TableDescriptorHeap> _tableDescHeap = make_shared<TableDescriptorHeap>();
+	shared_ptr<DepthStencilBuffer> _depthStencilBuffer = make_shared<DepthStencilBuffer>();
+
+	shared_ptr<Input> _input = make_shared<Input>();
+	shared_ptr<Timer> _timer = make_shared<Timer>();
 };
