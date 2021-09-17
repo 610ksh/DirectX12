@@ -3,7 +3,12 @@
 // 전방선언
 class Material;
 
-// [유니티짱]과 같이 정점으로 이루어진 물체
+/*
+	[유니티짱]과 같이 정점으로 이루어진 물체
+	각 메시는 아래의 정보를 가지게 된다.
+	1. Transform 정보
+	2. Material 정보
+*/
 class Mesh
 {
 public:

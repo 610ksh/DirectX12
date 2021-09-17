@@ -60,8 +60,8 @@ private:
 	// 렌더링이 한 프레임을 그리고나면 다시 0으로 초기화함.
 	uint32					_currentIndex = 0;
 
-	// 용도를 기록하는 레지스터 정보 변수
-	CBV_REGISTER			_reg = {};
+	// 용도를 기록하는 레지스터 정보 변수 (b0~b4중 하나)
+	CBV_REGISTER			_reg = {}; // 초기화 안하면 처음값 b0가 들어감.
 
 };
 

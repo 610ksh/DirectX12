@@ -2,7 +2,7 @@
 #include "Engine.h"
 #include "Material.h" // for MaterialParams
 
-
+/// 엔진 초기화
 void Engine::Init(const WindowInfo& info)
 {
 	_window = info;

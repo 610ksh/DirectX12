@@ -3,16 +3,22 @@
 #include "Engine.h"
 #include "Material.h"
 
-// 하나의 메시와 쉐이더 객체를 하나 생성함
+// 1개의 메시를 생성. 전역변수. (하나의 오브젝트 정보)
 shared_ptr<Mesh> mesh = make_shared<Mesh>();
 
 void Game::Init(const WindowInfo & info)
 {
-	// 엔진 초기화
+	/// 1. 엔진 초기화
+	/*
+		1. 전체 엔진 사용을 위한 모든 클래스 변수 생성 및 초기화
+		2. 2개의 Constant Buffer 생성
+		- Transform을 위한 b0 레지스터 사용. 연결
+		- Material을 위한 b1 레지스터 사용. 연결
+	*/
 	GEngine->Init(info);
 
-	/// 정점 정보
-	// 지금은 정점을 하나만 넘기는 형태. 메시에 넘기는 데이터
+	/// 2. Vertex 정보 생성
+	// 메시 하나가 사용할 정점 정보 생성.
 	vector<Vertex> vec(4);
 	vec[0].pos = Vec3(-0.5f, 0.5f, 0.5f);
 	vec[0].color = Vec4(1.f, 0.f, 0.f, 1.f);
@@ -27,6 +33,7 @@ void Game::Init(const WindowInfo & info)
 	vec[3].color = Vec4(0.f, 1.f, 0.f, 1.f);
 	vec[3].uv = Vec2(0.f, 1.f); // (0,1)
 
+	/// 3. Index 정보 생성
 	vector<uint32> indexVec;
 	{
 		indexVec.push_back(0);
@@ -39,28 +46,30 @@ void Game::Init(const WindowInfo & info)
 		indexVec.push_back(3);
 	}
 
-	// 메시 초기화
+	/// 4. Mesh 초기화. (정점, 인덱스 정보 필요)
 	mesh->Init(vec, indexVec);
 
-	/// Shader, Texture 생성
+	/// 5. Shader, Texture 생성 및 초기화
+	// 세이더, 텍스처 변수 선언
 	shared_ptr<Shader> shader = make_shared<Shader>();
 	shared_ptr<Texture> texture = make_shared<Texture>();
-	// shader 초기화 -> HLSL 파일 인식. (VertexShader, PixelShader 생성)
+	// shader, texture 초기화, HLSL 파일 인식. (VertexShader, PixelShader 생성)
 	shader->Init(L"..\\Resources\\Shader\\default.hlsli");
-	// texture 초기화
 	texture->Init(L"..\\Resources\\Texture\\veigar.jpg");
 	
-	/// Material 생성
+	/// 6. Material 생성
 	shared_ptr<Material> material = make_shared<Material>();
 	material->SetShader(shader); // 사용할 세이더 설정
-	material->SetFloat(0, 0.3f); // b1 정보
-	material->SetFloat(1, 0.4f); // b1 정보
-	material->SetFloat(2, 0.3f); // b1 정보
+	material->SetFloat(0, 0.3f); // b1 정보의 float_0
+	material->SetFloat(1, 0.4f); // b1 정보의 float_1
+	material->SetFloat(2, 0.3f); // b1 정보의 float_2
 	material->SetTexture(0, texture); // tex_0(t0)에 베이가 텍스처를 넘김
 
-	/// 최종적으로 위에서 만든 Material을 mesh에 지정함
+	/// 7. 최종적으로 위에서 만든 Material을 mesh에 지정함
 	mesh->SetMaterial(material); 
 
+	/// 8. 위의 내용이 전부다 완료될때까지 잠시 대기. 
+	// CPU와 GPU의 설정상 동기화 수행
 	GEngine->GetCmdQueue()->WaitSync();
 }
 
@@ -86,7 +95,7 @@ void Game::Update()
 		/// 변수 지정 및 설정값 추가
 		static Transform t = {}; // 한번 선언하면 끝까지 유지됨.
 		
-		/// 키보드 입력값 처리
+		/// 키보드 입력값 처리 (x,y 값만)
 		// 키를 누르면 이동하게됨. 1씩.
 		// 근데 만약에 우리가 W를 1초간 눌렀고, 1초동안 프레임이 100번 돌아가면
 		// 갑자기 100씩 이동하게 된다.
@@ -99,10 +108,12 @@ void Game::Update()
 		if (INPUT->GetButton(KEY_TYPE::D))
 			t.offset.x += 1.f * DELTA_TIME;
 
-		// 위에서 변화된 t값으로 Transform 정보를 바꿈
+		/// Transform 설정 (최종 결정)
 		mesh->SetTransform(t);
+		
 		/// 최종적으로 Render
-		mesh->Render(); // 여기서 Material Update가 실행됨.
+		// Transform 정보와 Material 정보가 모두 들어감.
+		mesh->Render(); 
 	}
 
 	/*{

@@ -5,6 +5,7 @@
 // 4바이트 위치 값을 담당
 cbuffer TEST_B0 : register(b0)
 {
+	// x,y,z 3개와 1개더 4개의 float
 	float4 offset0;
 };
 
@@ -12,7 +13,7 @@ cbuffer TEST_B0 : register(b0)
 
 // for Material
 
-// MaterialParams
+// MaterialParams, _params형태로 통째로 넘어감
 cbuffer MATERIAL_PARAMS : register(b1)
 {
 	int int_0;
@@ -20,15 +21,15 @@ cbuffer MATERIAL_PARAMS : register(b1)
 	int int_2;
 	int int_3;
 	int int_4;
-	float float_0;
-	float float_1;
-	float float_2;
+	float float_0; // 사용
+	float float_1; // 사용
+	float float_2; // 사용
 	float float_3;
 	float float_4;
 };
 
 // Texture
-Texture2D tex_0 : register(t0);
+Texture2D tex_0 : register(t0); // 사용
 Texture2D tex_1 : register(t1);
 Texture2D tex_2 : register(t2);
 Texture2D tex_3 : register(t3);
@@ -69,12 +70,14 @@ VS_OUT VS_Main(VS_IN input)
 
 	// 일단 그냥 있는 그대로 넘김
 	output.pos = float4(input.pos, 1.f);
-	//output.pos += offset0; // offset0으로 조정
 
 	// b1 레지스터에 있는 float 변수를 이용해서 값을 바꿈!
 	output.pos.x += float_0;
 	output.pos.y += float_1;
 	output.pos.z += float_2;
+
+	// b0 레지스터로 위치값 바꿈. 키보드 입력
+	output.pos += offset0; 
 
 	output.color = input.color;
 	output.uv = input.uv;

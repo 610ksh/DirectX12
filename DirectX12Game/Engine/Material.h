@@ -21,8 +21,9 @@ struct MaterialParams
 	// std::array 선언, 범위체크를 자동으로 하는 기능이 내장되어있다.
 	// 일반 배열보다 권장됨. 안정성 체크.
 	// 벡터와 유사하지만 길이가 고정된 배열
-	array<int32, MATERIAL_INT_COUNT> intParams;
-	array<float, MATERIAL_FLOAT_COUNT> floatParams;
+	// 아래의 배열은 세이더에 그대로 전달되고 있다. Material의 Update함수에 의해
+	array<int32, MATERIAL_INT_COUNT> intParams; // 5개 생성
+	array<float, MATERIAL_FLOAT_COUNT> floatParams; // 5개 생성
 };
 
 /// Material
@@ -44,7 +45,7 @@ private:
 	shared_ptr<Shader>	_shader;
 	// Material 파라미터 (위에 따로 구조체로 만듦)
 	MaterialParams		_params;
-	// Texture (텍스처)
+	// Texture (텍스처), 5개를 미리 생성해놈.
 	array<shared_ptr<Texture>, MATERIAL_TEXTURE_COUNT> _textures;
 };
 

@@ -70,10 +70,10 @@ using Vec3 = XMFLOAT3;
 using Vec4 = XMFLOAT4;
 using Matrix = XMMATRIX;
 
-
-// 사이즈를 uint8로 줄임. 기본은 int임.
+// Constant Buffer를 위한 레지스터 번호
 enum class CBV_REGISTER : uint8
 {
+	// 사이즈를 uint8로 줄임. 기본은 int임.
 	b0,
 	b1,
 	b2,
@@ -83,6 +83,7 @@ enum class CBV_REGISTER : uint8
 	END // ★개수로 이용할 수 있음.
 }; // MAXCOUNT, COUNT 등으로 이용한다고 함.
 
+// 텍스처를 위한 t0~t4
 enum class SRV_REGISTER : uint8
 {
 	t0 = static_cast<uint8>(CBV_REGISTER::END),
@@ -92,7 +93,7 @@ enum class SRV_REGISTER : uint8
 	t4,
 
 	END
-}; // 텍스처를 위한 t0~t4
+}; 
 
 enum
 {
