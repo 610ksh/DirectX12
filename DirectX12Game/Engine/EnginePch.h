@@ -124,7 +124,7 @@ struct Transform
 	Vec4 offset;
 };
 
-// 자주 사용하는 함수 패턴을 매크로로 묶자
+/// 자주 사용하는 함수 패턴을 매크로로 묶어둠.
 #define DEVICE GEngine->GetDevice()->GetDevice()
 #define	CMD_LIST GEngine->GetCmdQueue()->GetCmdList()
 #define RESOURCE_CMD_LIST	GEngine->GetCmdQueue()->GetResourceCmdList()
@@ -132,6 +132,8 @@ struct Transform
 
 #define INPUT				GEngine->GetInput()
 #define DELTA_TIME			GEngine->GetTimer()->GetDeltaTime()
+
+#define CONST_BUFFER(type)	GEngine->GetConstantBuffer(type)
 
 // Engine 클래스 전역변수. 일종의 싱글톤 형태. 전방선언까지 해주자.
 extern unique_ptr<class Engine> GEngine; // 외부에서 접근가능(extern)

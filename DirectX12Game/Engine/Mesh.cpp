@@ -1,8 +1,11 @@
 #include "pch.h"
 #include "Mesh.h"
 #include "Engine.h"
+#include "Material.h"
 
-/// discarded version, only study
+//////////////////////////////////////////
+
+// discarded version, only study (초기 방식)
 void Mesh::Init(vector<Vertex>& vec)
 {
 	// 정점 수 
@@ -71,27 +74,20 @@ void Mesh::Render()
 	// 2) TableDescriptorHeap에다가 CBV(Heap) 내용을 그대로 copy함 (CopyDescriptors)
 	// 3) 모든 세팅이 끝났으면 TableDescriptorHeap을 Commit한다. (레지스터로 올려보냄)
 
-	// (연결지을 레지스터 번호, 복사할 데이터값, 그 크기)
-	// 이 부분에서 쉐이더 코드의 0과 1이 결정됨. 첫번째 4바이트, 2번째 4바이트
-	// ※ 넘기는 transform이 같은 변수이기 때문에 결국 1개의 transform을 가지고,
-	// 2개의 변수, 위치값과 색상값을 변경하고 있음. 그래서 독립적으로 보이지 않은거임.
-	{
-		// 위치값 조절
-		// 1) 데이터 밀어넣고 handle 받아오기
-		D3D12_CPU_DESCRIPTOR_HANDLE handle = GEngine->GetCB()->PushData(0, &_transform, sizeof(_transform));
-		// 2) SetCBV
-		GEngine->GetTableDescHeap()->SetCBV(handle, CBV_REGISTER::b0);
-		// 3) SetSRV, texture의 핸들을 받아서 우리가 원하는 레지스터에 밀어넣는 부분임. t0이용.
-		GEngine->GetTableDescHeap()->SetSRV(_tex->GetCpuHandle(), SRV_REGISTER::t0);
-	}
-	{
-		//GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform)); // 색상값 조절
-		// 색상값 조절
-		// 1) 데이터 밀어넣고 handle 받아오기
-		D3D12_CPU_DESCRIPTOR_HANDLE handle = GEngine->GetCB()->PushData(1, &_transform, sizeof(_transform));
-		// 2) SetCBV
-		GEngine->GetTableDescHeap()->SetCBV(handle, CBV_REGISTER::b1);
-	}
+	// Transform 지정. (현재는 위치값 조절)
+	CONST_BUFFER(CONSTANT_BUFFER_TYPE::TRANSFORM)->PushData(&_transform, sizeof(_transform));
+	/*
+	위의 내용 정리.
+	(연결지을 레지스터 번호, 복사할 데이터값, 그 크기)
+	이 부분에서 쉐이더 코드의 0과 1이 결정됨. 첫번째 4바이트, 2번째 4바이트
+	※ 넘기는 transform이 같은 변수이기 때문에 결국 1개의 transform을 가지고,
+	2개의 변수, 위치값과 색상값을 변경하고 있음. 그래서 독립적으로 보이지 않은거임.
+*/
+
+	// material에 묶인 애들을 한번에 처리함.
+	// 내부적으로 새로 CB를 만들어서 텍스처와 관련된 부분을 처리함. PushData도 있음.
+	// 텍스처 코드 여기서 작동함.
+	_mat->Update(); 
 
 	// 3) 최종적으로 DescriptorHeap과 레지스터를 연결지음
 	GEngine->GetTableDescHeap()->CommitTable();

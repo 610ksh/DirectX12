@@ -1,3 +1,6 @@
+/////////////////////////////////////////////
+
+// for Transform
 
 // 4바이트 위치 값을 담당
 cbuffer TEST_B0 : register(b0)
@@ -5,14 +8,33 @@ cbuffer TEST_B0 : register(b0)
 	float4 offset0;
 };
 
-// 4바이트 색상 쪽을 담당
-cbuffer TEST_B1 : register(b1)
+/////////////////////////////////////////////
+
+// for Material
+
+// MaterialParams
+cbuffer MATERIAL_PARAMS : register(b1)
 {
-	float4 offset1;
+	int int_0;
+	int int_1;
+	int int_2;
+	int int_3;
+	int int_4;
+	float float_0;
+	float float_1;
+	float float_2;
+	float float_3;
+	float float_4;
 };
 
-// t0 레지스터를 이용하겠다고 선언.
+// Texture
 Texture2D tex_0 : register(t0);
+Texture2D tex_1 : register(t1);
+Texture2D tex_2 : register(t2);
+Texture2D tex_3 : register(t3);
+Texture2D tex_4 : register(t4);
+
+/////////////////////////////////////////////
 
 // SamplerState
 SamplerState sam_0 : register(s0);
@@ -31,6 +53,10 @@ struct VS_OUT
 	float2 uv : TEXCOORD;
 };
 
+/////////////////////////////////////////////
+
+// Main함수
+
 // VS = Vertex Shader
 VS_OUT VS_Main(VS_IN input)
 {
@@ -43,7 +69,13 @@ VS_OUT VS_Main(VS_IN input)
 
 	// 일단 그냥 있는 그대로 넘김
 	output.pos = float4(input.pos, 1.f);
-	output.pos += offset0; // offset0으로 조정
+	//output.pos += offset0; // offset0으로 조정
+
+	// b1 레지스터에 있는 float 변수를 이용해서 값을 바꿈!
+	output.pos.x += float_0;
+	output.pos.y += float_1;
+	output.pos.z += float_2;
+
 	output.color = input.color;
 	output.uv = input.uv;
 

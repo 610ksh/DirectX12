@@ -1,14 +1,10 @@
 #include "pch.h" // precompiled header 설정에 의해서 자동으로 추가된 헤더
 #include "Game.h"
 #include "Engine.h"
+#include "Material.h"
 
 // 하나의 메시와 쉐이더 객체를 하나 생성함
-shared_ptr<Mesh> mesh = make_shared<Mesh>(); // 메시를 딱 1개만 생성함
-shared_ptr<Shader> shader = make_shared<Shader>();
-
-// Texture도 1개만 생성해봄.
-shared_ptr<Texture> texture = make_shared<Texture>();
-
+shared_ptr<Mesh> mesh = make_shared<Mesh>();
 
 void Game::Init(const WindowInfo & info)
 {
@@ -46,12 +42,25 @@ void Game::Init(const WindowInfo & info)
 	// 메시 초기화
 	mesh->Init(vec, indexVec);
 
+	/// Shader, Texture 생성
+	shared_ptr<Shader> shader = make_shared<Shader>();
+	shared_ptr<Texture> texture = make_shared<Texture>();
 	// shader 초기화 -> HLSL 파일 인식. (VertexShader, PixelShader 생성)
 	shader->Init(L"..\\Resources\\Shader\\default.hlsli");
-
 	// texture 초기화
 	texture->Init(L"..\\Resources\\Texture\\veigar.jpg");
 	
+	/// Material 생성
+	shared_ptr<Material> material = make_shared<Material>();
+	material->SetShader(shader); // 사용할 세이더 설정
+	material->SetFloat(0, 0.3f); // b1 정보
+	material->SetFloat(1, 0.4f); // b1 정보
+	material->SetFloat(2, 0.3f); // b1 정보
+	material->SetTexture(0, texture); // tex_0(t0)에 베이가 텍스처를 넘김
+
+	/// 최종적으로 위에서 만든 Material을 mesh에 지정함
+	mesh->SetMaterial(material); 
+
 	GEngine->GetCmdQueue()->WaitSync();
 }
 
@@ -59,19 +68,12 @@ void Game::Update()
 {
 	// 맨앞에 일단 넣음.
 	GEngine->Update();
-
 	// 전체 렌더링 초기화 및 사전 준비단계.
 	// 렌더링 관련 부분에서 초기화가 필요한 작업을 RenderBegin에서 한다.
 	// 현재는 _cmdQueue->RenderBegin(&_viewport, &_scissorRect) 코드 뿐이다.
 	GEngine->RenderBegin();
 
-	// 쉐이더를 먼저 업데이트
-	// 한 프레임에 하나의 전체 렌더링 파이프라인을 만듦.
-	// 매 프레임마다 새롭게 생성하는 구조임.
-	shader->Update();
-	
 	/// TODO!
-	
 	/*
 		<Notice>
 		만약 위치값과 색상값이 다르게 적용되길 바란다면,
@@ -84,6 +86,7 @@ void Game::Update()
 		/// 변수 지정 및 설정값 추가
 		static Transform t = {}; // 한번 선언하면 끝까지 유지됨.
 		
+		/// 키보드 입력값 처리
 		// 키를 누르면 이동하게됨. 1씩.
 		// 근데 만약에 우리가 W를 1초간 눌렀고, 1초동안 프레임이 100번 돌아가면
 		// 갑자기 100씩 이동하게 된다.
@@ -96,11 +99,10 @@ void Game::Update()
 		if (INPUT->GetButton(KEY_TYPE::D))
 			t.offset.x += 1.f * DELTA_TIME;
 
+		// 위에서 변화된 t값으로 Transform 정보를 바꿈
 		mesh->SetTransform(t);
-		mesh->SetTexture(texture); // texture 지정
-
 		/// 최종적으로 Render
-		mesh->Render();
+		mesh->Render(); // 여기서 Material Update가 실행됨.
 	}
 
 	/*{

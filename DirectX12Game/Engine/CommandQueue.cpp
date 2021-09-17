@@ -83,7 +83,10 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 
 	/// 루트 시그니처 추가.
 	_cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
-	GEngine->GetCB()->Clear(); // 시작전 ConstantBuffer 초기화 먼저 해주자.
+
+	/// 시작전 ConstantBuffer 먼저 밀어주자. 깔끔하게 새거로 초기화.
+	GEngine->GetConstantBuffer(CONSTANT_BUFFER_TYPE::TRANSFORM)->Clear();
+	GEngine->GetConstantBuffer(CONSTANT_BUFFER_TYPE::MATERIAL)->Clear();
 	
 	/// DescriptorHeap 관련 추가
 	GEngine->GetTableDescHeap()->Clear(); // Table도 초기화

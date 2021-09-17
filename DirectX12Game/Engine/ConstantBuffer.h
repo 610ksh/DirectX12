@@ -7,16 +7,31 @@
 	3) Buffer의 주소를 register에다가 전송해서 알려줌
 */
 
+/// CostantBuffer 용도 구분
+enum class CONSTANT_BUFFER_TYPE : uint8
+{
+	TRANSFORM,
+	MATERIAL,
+	END // for counting
+};
+
+enum
+{
+	CONSTANT_BUFFER_COUNT = static_cast<uint8>(CONSTANT_BUFFER_TYPE::END)
+};
+
+
 class ConstantBuffer
 {
 public:
 	ConstantBuffer();
 	~ConstantBuffer();
 
-	void Init(uint32 size, uint32 count);
+	// reg : 어떤 용도인지
+	void Init(CBV_REGISTER reg, uint32 size, uint32 count);
 
 	void Clear();
-	D3D12_CPU_DESCRIPTOR_HANDLE PushData(int32 rootParamIndex, void* buffer, uint32 size);
+	void PushData(void* buffer, uint32 size);
 
 	D3D12_GPU_VIRTUAL_ADDRESS GetGpuVirtualAddress(uint32 index);
 	// Handle값을 계산해주는 함수
@@ -44,5 +59,9 @@ private:
 	// 지금 어디까지 버퍼를 생성하고 있는지에 대한 인덱스.
 	// 렌더링이 한 프레임을 그리고나면 다시 0으로 초기화함.
 	uint32					_currentIndex = 0;
+
+	// 용도를 기록하는 레지스터 정보 변수
+	CBV_REGISTER			_reg = {};
+
 };
 

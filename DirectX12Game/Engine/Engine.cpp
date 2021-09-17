@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Engine.h"
+#include "Material.h" // for MaterialParams
 
 
 void Engine::Init(const WindowInfo& info)
@@ -15,7 +16,6 @@ void Engine::Init(const WindowInfo& info)
 	_cmdQueue->Init(_device->GetDevice(), _swapChain);
 	_swapChain->Init(info, _device->GetDevice(), _device->GetDXGI(), _cmdQueue->GetCmdQueue());
 	_rootSignature->Init();
-	_cb->Init(sizeof(Transform), 256);
 	_tableDescHeap->Init(256);
 	// 참고로 밑의 코드는 ResizeWindow에서 한번더 호출하고 있다.
 	// 학습을 목적으로 전체적으로 어떤 구조인지 이해하기 위해 나두도록 하자.
@@ -24,6 +24,11 @@ void Engine::Init(const WindowInfo& info)
 	/// 장치 초기화
 	_input->Init(info.hwnd);
 	_timer->Init();
+
+
+	/// Constant Buffer 생성. Transform 용도와 Material 용도.
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(Transform), 256);
+	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 256);
 
 	ResizeWindow(info.width, info.height); // 화면 크기를 재조정.
 }
@@ -87,4 +92,21 @@ void Engine::ShowFps()
 
 	// WinAPI로 화면에 출력하고 있다. 현재 창
 	::SetWindowText(_window.hwnd, text);
+}
+
+// 사용할 레지스터 번호, 버퍼사이즈와 버퍼의 개수
+void Engine::CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 count)
+{
+	// 레지스터 번호를 받아옴
+	uint8 typeInt = static_cast<uint8>(reg);
+	// 순서대로 받고 있는지 체크하는 함수.
+	// 0번부터 n번까지 레지스터를 반드시 순서대로 사용. 
+	assert(_constantBuffers.size() == typeInt);
+
+	// 버퍼를 내부에서 생성.
+	shared_ptr<ConstantBuffer> buffer = make_shared<ConstantBuffer>();
+	// 버퍼 초기화 함수 호출.
+	buffer->Init(reg, bufferSize, count);
+	// 생성한 버퍼를 버퍼 배열에 추가
+	_constantBuffers.push_back(buffer);
 }

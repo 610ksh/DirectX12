@@ -22,13 +22,13 @@
 - [x] 최초 프로젝트 설정 및 셋팅 (2021.06.07) / https://blog.naver.com/610ksh/222388342098
 - [x] 장치 초기화 (2021.06.08) / https://blog.naver.com/610ksh/222389757864
 - [x] 삼각형 띄우기 (2021.09.08) / https://blog.naver.com/610ksh/222392496872
-- [x] Constant Buffer View(CBV) (2021.09.09) / https://blog.naver.com/610ksh/222415510639
-- [x] Descriptor Table(DescriptorHeap) (2021.09.10) / https://blog.naver.com/610ksh/222417967521
-- [x] Index Buffer (2021.09.13) / https://blog.naver.com/610ksh/222418610083
-- [x] Texture Mapping (2021.09.14) / https://blog.naver.com/610ksh/222505298506
-- [x] Depth Stencil View (2021.09.15) / https://blog.naver.com/610ksh/222506519945
-- [x] Input & Timer (2021.09.16) / https://blog.naver.com/610ksh/222508029404
-- [ ] Material
+- [x] Constant Buffer View(CBV) (09.09) / https://blog.naver.com/610ksh/222415510639
+- [x] Descriptor Table(DescriptorHeap) (09.10) / https://blog.naver.com/610ksh/222417967521
+- [x] Index Buffer (09.13) / https://blog.naver.com/610ksh/222418610083
+- [x] Texture Mapping (09.14) / https://blog.naver.com/610ksh/222505298506
+- [x] Depth Stencil View (09.15) / https://blog.naver.com/610ksh/222506519945
+- [x] Input & Timer (09.16) / https://blog.naver.com/610ksh/222508029404
+- [x] Material (09.17) / https://blog.naver.com/610ksh/222509237814
 - [ ] Component
 - [ ] Scene
 - [ ] Vector & Matrix
@@ -73,10 +73,10 @@
 ## 2-1. Input & Timer
 ![Image](Git_Resources/Chapter2/Input&Timer.gif)
 
-### 2-2. x
-![]()
+## 2-2. Material
+![Image](Git_Resources/Chapter2/Material.png)
 
-### 2-3. x
+## 2-3. x
 ![]()
 
 ---

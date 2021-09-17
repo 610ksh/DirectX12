@@ -28,11 +28,17 @@ void Input::Update()
 		return;
 	}
 
+	// 256개 byte 배열을 만듦
+	BYTE asciiKeys[KEY_TYPE_COUNT] = {};
+	// asciiKeys에 키보드 입력값 상태가 들어감
+	if (::GetKeyboardState(asciiKeys) == false)
+		return;
+
 	// 전체 키값을 체크함
 	for (uint32 key = 0; key < KEY_TYPE_COUNT; key++)
 	{
-		// 키가 이전에 눌려 있으면 true (bit flag로 뱉어줌)
-		if (::GetAsyncKeyState(key) & 0x8000)
+		// 이전에 눌려 있었다면 0x80을 반환(양수=true)
+		if (asciiKeys[key] & 0x80)
 		{
 			// 이전의 key값의 상태를 받아옴. 참조자로
 			KEY_STATE& state = _states[key];

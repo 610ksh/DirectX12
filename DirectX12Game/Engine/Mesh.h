@@ -1,6 +1,7 @@
 #pragma once
 
-class Texture;
+// 전방선언
+class Material;
 
 // [유니티짱]과 같이 정점으로 이루어진 물체
 class Mesh
@@ -15,7 +16,8 @@ public:
 
 	// setter
 	void SetTransform(const Transform& t) { _transform = t; } // Transform
-	void SetTexture(shared_ptr<Texture> tex) { _tex = tex; } // Texture
+	// 사실 Material 설정은 메시에서 하는게 이상할수도 있다. 일단은 넣어두자.
+	void SetMaterial(shared_ptr<Material> mat) { _mat = mat; } // Material
 
 private:
 	void CreateVertexBuffer(const vector<Vertex>& buffer);
@@ -32,8 +34,10 @@ private:
 	D3D12_INDEX_BUFFER_VIEW		_indexBufferView;
 	uint32 _indexCount = 0;
 
+	/// 메시 내장 변수들
+	// Transform 정보
 	Transform _transform = {};
-	/// Texture
-	shared_ptr<Texture> _tex = {};
+	// Matereial 정보
+	shared_ptr<Material> _mat = {};
 };
 

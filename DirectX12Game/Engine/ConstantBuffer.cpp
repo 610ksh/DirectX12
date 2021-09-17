@@ -21,8 +21,11 @@ ConstantBuffer::~ConstantBuffer()
 }
 
 
-void ConstantBuffer::Init(uint32 size, uint32 count)
+void ConstantBuffer::Init(CBV_REGISTER reg, uint32 size, uint32 count)
 {
+	// 용도를 기록하는 레지스터 등록
+	_reg = reg;
+
 	// 상수 버퍼는 256 바이트(BYTE) 배수로 만들어야 한다.
 	// 0 256 512 768 (2^8, 2^16, 2^24...)
 	// 버퍼는 실제로 배열이 아닌데, 마치 배열같은 형태를 가지게 된다.
@@ -103,21 +106,27 @@ void ConstantBuffer::Clear()
 	_currentIndex = 0;
 }
 
-// 실질적으로 버퍼에다가 데이터를 넣는 부분. (rootParamIndex : 루트 테이블의 슬롯 번호, buffer : 버퍼 주소값)
-D3D12_CPU_DESCRIPTOR_HANDLE ConstantBuffer::PushData(int32 rootParamIndex, void* buffer, uint32 size)
+// 실질적으로 버퍼에다가 데이터를 넣는 부분. (buffer : 버퍼 주소값)
+void ConstantBuffer::PushData(void* buffer, uint32 size)
 {
 	/// 아래의 내용 요약
 	// 1) Buffer에다가 데이터 세팅
 	// 2) Buffer의 주소를 register에다가 전송
 
-	// 조건이 맞으면 통과. 아니면 크래쉬. 혹시라도 처음 만들어준 버퍼의 크기를 넘어서는 순간 체크
-	assert(_currentIndex < _elementSize);
+	// assert : 조건이 맞으면 통과. 아니면 크래쉬.
+	// 혹시라도 처음 만들어준 버퍼의 크기를 넘어서는 순간 체크
+	assert(_currentIndex < _elementCount);
+	// 혹시라도 엉뚱한 데이터를 막는 용도로 추가함.
+	assert(_elementSize == ((size + 255) & ~255));
 
 	// 실제 GPU 버퍼에 데이터를 밀어넣는 함수. _mappedBuffer를 이용함.
 	::memcpy(&_mappedBuffer[_currentIndex * _elementSize], buffer, size);
 	
 	// 현재 해당하는 핸들값을 구함
 	D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle = GetCpuHandle(_currentIndex);
+
+	/// Set CBV
+	GEngine->GetTableDescHeap()->SetCBV(cpuHandle, _reg);
 
 	/*
 	/// 기존의 방식 Constant Buffer 예제 실습 방식.
@@ -129,8 +138,6 @@ D3D12_CPU_DESCRIPTOR_HANDLE ConstantBuffer::PushData(int32 rootParamIndex, void*
 	CMD_LIST->SetGraphicsRootConstantBufferView(rootParamIndex, address); // 레지스터와 버퍼를 연결
 	*/
 	_currentIndex++;
-
-	return cpuHandle;
 }
 
 // GPU 버퍼의 가상 주소를 가져오는 getter
