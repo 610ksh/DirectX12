@@ -59,41 +59,14 @@ void Mesh::Render()
 	/// 1) IA 시리즈, Input Assembler stage
 	// 삼각형리스트 형태로 만들거를 선언함. (Input Assembler 단계)
 	CMD_LIST->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	// 어떤 버퍼를 사용할지 설정. vertexBufferView에는 3개의 정점이 있을거임
-	// Slot: (0~15)
+	// 어떤 버퍼를 사용할지 설정. vertexBufferView에는 3개의 정점이 있음. Slot: (0~15)
 	CMD_LIST->IASetVertexBuffers(0, 1, &_vertexBufferView); // VertexBuffer
 	CMD_LIST->IASetIndexBuffer(&_indexBufferView); // IndexBuffer
 	
-	// 기존의 방식 ConstantBuffer 방식
-	// 1) GPU 램에 있는 Buffer에 데이터를 밀어 넣어줌 (세팅)
-	// 2) 그 Buffer의 주소를 GPU에 있는 register(b0,b1등등)에다가 전송시켜서 연결지음.
-	// ex) CMD_LIST->SetGraphicsRootConstantBufferView(0, ??) 형태임.
-	// => ConstantBuffer 클래스에서 위의 내용을 처리했음.
-
-	/// TODO, 우리가 여기서 처리해야하는 내용
-	// 1) Buffer에다가 데이터 세팅 (PushData로 함)
-	// 2) TableDescriptorHeap에다가 CBV(Heap) 내용을 그대로 copy함 (CopyDescriptors)
-	// 3) 모든 세팅이 끝났으면 TableDescriptorHeap을 Commit한다. (레지스터로 올려보냄)
-
-	/// 2) Transform 정보 지정 (현재는 위치값 조절)
-	CONST_BUFFER(CONSTANT_BUFFER_TYPE::TRANSFORM)->PushData(&_transform, sizeof(_transform));
-	/*
-	위의 내용 정리.
-	(연결지을 레지스터 번호, 복사할 데이터값, 그 크기)
-	이 부분에서 쉐이더 코드의 0과 1이 결정됨. 첫번째 4바이트, 2번째 4바이트
-	※ 넘기는 transform이 같은 변수이기 때문에 결국 1개의 transform을 가지고,
-	2개의 변수, 위치값과 색상값을 변경하고 있음. 그래서 독립적으로 보이지 않은거임.
-*/
-
-	/// 3) Material 정보 지정 (텍스처 사용과 파이프라인 설정)
-	// 내부적으로 새로 CB를 만들어서 텍스처와 관련된 부분을 처리함. PushData도 있음.
-	// 텍스처 코드 여기서 작동함.
-	_mat->Update(); 
-
-	/// 4) 최종적으로 DescriptorHeap과 레지스터를 연결지음
+	/// 2) 최종적으로 DescriptorHeap과 레지스터를 연결지음
 	GEngine->GetTableDescHeap()->CommitTable();
 	
-	/// 5) 실제로 화면에 그림
+	/// 3) 실제로 화면에 그림
 	// VertexBuffer 방식으로 그리는 함수
 	// CMD_LIST->DrawInstanced(_vertexCount, 1, 0, 0);
 	// IndexBuffer를 이용해서 그리는 함수

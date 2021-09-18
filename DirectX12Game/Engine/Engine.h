@@ -25,6 +25,7 @@ public:
 
 public:
 	void Update();
+	void LateUpdate();
 
 public:
 	// 다른곳에서 각 클래스들이 필요할때마다 가져다 쓸 예정. Engine을 접근하면 다 있음.

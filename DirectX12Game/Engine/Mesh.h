@@ -19,14 +19,10 @@ public:
 	void Init(const vector<Vertex>& vertexBuffer, const vector<uint32>& indexbuffer);
 	void Render();
 
-	// setter
-	void SetTransform(const Transform& t) { _transform = t; } // Transform
-	// 사실 Material 설정은 메시에서 하는게 이상할수도 있다. 일단은 넣어두자.
-	void SetMaterial(shared_ptr<Material> mat) { _mat = mat; } // Material
-
 private:
 	void CreateVertexBuffer(const vector<Vertex>& buffer);
-	void CreateIndexBuffer(const vector<uint32>& buffer); // tip : 메시가 크지 않으면 uint16으로 해도 충분하다!
+	// tip : 메시가 크지 않으면 uint16으로 해도 충분하다!
+	void CreateIndexBuffer(const vector<uint32>& buffer); 
 
 private:
 	/// Vertex Buffer
@@ -39,10 +35,5 @@ private:
 	D3D12_INDEX_BUFFER_VIEW		_indexBufferView;
 	uint32 _indexCount = 0;
 
-	/// 메시 내장 변수들
-	// Transform 정보
-	Transform _transform = {};
-	// Matereial 정보
-	shared_ptr<Material> _mat = {};
 };
 

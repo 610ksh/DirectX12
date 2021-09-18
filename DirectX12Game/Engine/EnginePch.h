@@ -118,12 +118,6 @@ struct Vertex
 	Vec2 uv;
 };
 
-// 물체의 정보
-struct Transform
-{
-	// float 4개
-	Vec4 offset;
-};
 
 /// 자주 사용하는 함수 패턴을 매크로로 묶어둠.
 #define DEVICE GEngine->GetDevice()->GetDevice()

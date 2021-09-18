@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Engine.h"
 #include "Material.h" // for MaterialParams
+#include "Transform.h" // for TransformMatrix
 
 /// 엔진 초기화
 void Engine::Init(const WindowInfo& info)
@@ -27,7 +28,7 @@ void Engine::Init(const WindowInfo& info)
 
 
 	/// Constant Buffer 생성. Transform 용도와 Material 용도.
-	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(Transform), 256);
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformMatrix), 256);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 256);
 
 	ResizeWindow(info.width, info.height); // 화면 크기를 재조정.
@@ -49,6 +50,11 @@ void Engine::Update()
 
 	// 현재 FPS 출력하는 함수
 	ShowFps();
+}
+
+void Engine::LateUpdate()
+{
+	// TODO
 }
 
 void Engine::RenderBegin()
