@@ -3,10 +3,22 @@
 #include "Material.h" // for MaterialParams
 #include "Transform.h" // for TransformMatrix
 
+// 장치 관련 헤더
+#include "Input.h"
+#include "Timer.h"
+#include "SceneManager.h"
+
 /// 엔진 초기화
 void Engine::Init(const WindowInfo& info)
 {
 	_window = info;
+
+	/*
+		1. 전체 엔진 사용을 위한 모든 클래스 변수 생성 및 초기화
+		2. 2개의 Constant Buffer 생성
+		- Transform을 위한 b0 레지스터 사용. 연결
+		- Material을 위한 b1 레지스터 사용. 연결
+	*/
 
 	// 그려질 화면 크기를 설정
 	_viewport = { 0, 0, static_cast<FLOAT>(info.width), static_cast<FLOAT>(info.height), 0.0f, 1.0f };
@@ -22,39 +34,38 @@ void Engine::Init(const WindowInfo& info)
 	// 학습을 목적으로 전체적으로 어떤 구조인지 이해하기 위해 나두도록 하자.
 	_depthStencilBuffer->Init(_window);
 
-	/// 장치 초기화
-	_input->Init(info.hwnd);
-	_timer->Init();
-
-
 	/// Constant Buffer 생성. Transform 용도와 Material 용도.
 	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformMatrix), 256);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 256);
 
 	ResizeWindow(info.width, info.height); // 화면 크기를 재조정.
+
+	/// 장치 초기화
+	GET_SINGLE(Input)->Init(info.hwnd);
+	GET_SINGLE(Timer)->Init();
+}
+
+void Engine::Update()
+{
+	GET_SINGLE(Input)->Update();
+	GET_SINGLE(Timer)->Update();
+
+	// 렌더링
+	Render();
+
+	// 현재 FPS 출력하는 함수
+	ShowFps();
 }
 
 void Engine::Render()
 {
 	RenderBegin();
 
-	// TODO : 나머지 물체를 그린다.
+	/// TODO : 나머지 물체를 그린다.
+	// 해당 씬에 있는 모든 물체를 그린다.
+	GET_SINGLE(SceneManager)->Update();
 
 	RenderEnd();
-}
-
-void Engine::Update()
-{
-	_input->Update();
-	_timer->Update();
-
-	// 현재 FPS 출력하는 함수
-	ShowFps();
-}
-
-void Engine::LateUpdate()
-{
-	// TODO
 }
 
 void Engine::RenderBegin()
@@ -83,11 +94,10 @@ void Engine::ResizeWindow(int32 width, int32 height)
 	_depthStencilBuffer->Init(_window);
 }
 
-
 void Engine::ShowFps()
 {
 	// timer에서 Fps를 가져옴. 매초마다 몇프레임인지
-	uint32 fps = _timer->GetFps();
+	uint32 fps = GET_SINGLE(Timer)->GetFps();
 
 	WCHAR text[100] = L"";
 	// wsprintf는 문자열을 만들어주는 함수인데,

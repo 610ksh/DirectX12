@@ -34,6 +34,9 @@ enum
 */
 class Input
 {
+	/// ΩÃ±€≈Ê √ﬂ∞°
+	DECLARE_SINGLE(Input);
+
 public:
 	void Init(HWND hwnd);
 	void Update();

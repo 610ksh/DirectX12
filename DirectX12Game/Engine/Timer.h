@@ -3,6 +3,9 @@
 
 class Timer
 {
+	/// ΩÃ±€≈Ê √ﬂ∞°
+	DECLARE_SINGLE(Timer);
+	
 public:
 	void Init();
 	void Update();

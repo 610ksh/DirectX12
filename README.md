@@ -30,7 +30,7 @@
 - [x] Input & Timer (09.16) / https://blog.naver.com/610ksh/222508029404
 - [x] Material (09.17) / https://blog.naver.com/610ksh/222509237814
 - [x] Component (09.18) / https://blog.naver.com/610ksh/222509738386
-- [ ] Scene
+- [x] Scene (09.19) / https://blog.naver.com/610ksh/222510823338
 - [ ] Vector & Matrix
 
 
@@ -78,6 +78,9 @@
 
 ## 2-3. Component
 ![Image](Git_Resources/Chapter2/Component.png)
+
+## 2-4. Scene
+![Image](Git_Resources/Chapter2/Scene.png)
 
 ---
 # 🎨Chapter3. Vector & Matrix

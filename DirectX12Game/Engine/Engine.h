@@ -11,9 +11,9 @@
 #include "Texture.h"
 #include "DepthStencilBuffer.h"
 
-// 장치 관련
-#include "Input.h"
-#include "Timer.h"
+/*
+	웬만하면 엔진쪽은 렌더링 관련된 부분만 놔두자.
+*/
 
 class Engine
 {
@@ -21,11 +21,7 @@ public:
 	// Client 프로젝트의 Game 클래스에서 호출할 예정인 함수들
 	// public으로 선언해줘야한다.
 	void Init(const WindowInfo& info);
-	void Render();
-
-public:
 	void Update();
-	void LateUpdate();
 
 public:
 	// 다른곳에서 각 클래스들이 필요할때마다 가져다 쓸 예정. Engine을 접근하면 다 있음.
@@ -36,13 +32,11 @@ public:
 	shared_ptr<TableDescriptorHeap> GetTableDescHeap() { return _tableDescHeap; }
 	shared_ptr<DepthStencilBuffer> GetDepthStencilBuffer() { return _depthStencilBuffer; }
 
-	shared_ptr<Input> GetInput() { return _input; }
-	shared_ptr<Timer> GetTimer() { return _timer; }
-
 	// 벡터를 꺼내 쓰도록 getter 추가
 	shared_ptr<ConstantBuffer> GetConstantBuffer(CONSTANT_BUFFER_TYPE type) { return _constantBuffers[static_cast<uint8>(type)]; }
 
 public:
+	void Render();
 	// 요청사항을 CommandQueue에 넣어주는것
 	void RenderBegin();
 	// 쌓아놓은 일감을 최종적으로 GPU에게 외주로 넘겨줌
@@ -68,9 +62,6 @@ private:
 	shared_ptr<RootSignature> _rootSignature = make_shared<RootSignature>();
 	shared_ptr<TableDescriptorHeap> _tableDescHeap = make_shared<TableDescriptorHeap>();
 	shared_ptr<DepthStencilBuffer> _depthStencilBuffer = make_shared<DepthStencilBuffer>();
-
-	shared_ptr<Input> _input = make_shared<Input>();
-	shared_ptr<Timer> _timer = make_shared<Timer>();
 
 	// 다양한 Constant Buffer를 저장해둘 배열 선언
 	vector<shared_ptr<ConstantBuffer>> _constantBuffers;

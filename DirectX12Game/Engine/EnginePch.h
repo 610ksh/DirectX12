@@ -118,6 +118,25 @@ struct Vertex
 	Vec2 uv;
 };
 
+/*
+	define은 한줄만 인식하는게 기본인데,
+	여러줄을 인식하려면 \을 각줄 마지막에 적어줘야한다.
+*/
+/// 싱글톤 패턴을 자동화 (type = class 이름)
+#define DECLARE_SINGLE(type)		\
+private:							\
+	type() {}						\
+	~type() {}						\
+public:								\
+	static type* GetInstance()		\
+	{								\
+		static type instance;		\
+		return &instance;			\
+	}								\
+
+// 싱글톤의 getter
+#define GET_SINGLE(type)	type::GetInstance()
+
 
 /// 자주 사용하는 함수 패턴을 매크로로 묶어둠.
 #define DEVICE GEngine->GetDevice()->GetDevice()
@@ -125,8 +144,8 @@ struct Vertex
 #define RESOURCE_CMD_LIST	GEngine->GetCmdQueue()->GetResourceCmdList()
 #define ROOT_SIGNATURE GEngine->GetRootSignature()->GetSignature()
 
-#define INPUT				GEngine->GetInput()
-#define DELTA_TIME			GEngine->GetTimer()->GetDeltaTime()
+#define INPUT				GET_SINGLE(Input)
+#define DELTA_TIME			GET_SINGLE(Timer)->GetDeltaTime()
 
 #define CONST_BUFFER(type)	GEngine->GetConstantBuffer(type)
 

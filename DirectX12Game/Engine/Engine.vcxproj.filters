@@ -20,6 +20,9 @@
     <Filter Include="소스 파일\GameObject">
       <UniqueIdentifier>{7e222470-9bbe-4913-9682-687ff9cc0017}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Manager">
+      <UniqueIdentifier>{d4237839-cb7c-4ba1-968a-bedeb3cce4fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -61,12 +64,6 @@
     <ClCompile Include="DepthStencilBuffer.cpp">
       <Filter>소스 파일\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>소스 파일\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>소스 파일\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>소스 파일\Resource</Filter>
     </ClCompile>
@@ -84,6 +81,18 @@
     </ClCompile>
     <ClCompile Include="MonoBehaviour.cpp">
       <Filter>소스 파일\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -129,12 +138,6 @@
     <ClInclude Include="DepthStencilBuffer.h">
       <Filter>소스 파일\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>소스 파일\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>소스 파일\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>소스 파일\Resource</Filter>
     </ClInclude>
@@ -152,6 +155,18 @@
     </ClInclude>
     <ClInclude Include="MonoBehaviour.h">
       <Filter>소스 파일\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
