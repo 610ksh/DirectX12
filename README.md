@@ -31,7 +31,9 @@
 - [x] Material (09.17) / https://blog.naver.com/610ksh/222509237814
 - [x] Component (09.18) / https://blog.naver.com/610ksh/222509738386
 - [x] Scene (09.19) / https://blog.naver.com/610ksh/222510823338
-- [ ] Vector & Matrix
+- [x] Trigonometry & Vector & Matrix (09.21) / https://blog.naver.com/610ksh/222512188442
+- []
+- [ ]
 
 
 ## :heavy_check_mark: Languages & Library
