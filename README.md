@@ -33,8 +33,8 @@
 - [x] Scene (09.19) / https://blog.naver.com/610ksh/222510823338
 - [x] Trigonometry & Vector & Matrix (09.21) / https://blog.naver.com/610ksh/222512188442
 - [x] Coordinate Transformation(World, View Matrix) (09.24) / https://blog.naver.com/610ksh/222513116337
-- [ ] Projection, Screen Transformation (09.25) / 
-- [ ] Camera (09.27) / 
+- [x] Projection, Screen Transformation (09.25) / https://blog.naver.com/610ksh/222516565902
+- [ ] Camera (09.26) / 
 
 
 ## :heavy_check_mark: Languages & Library
