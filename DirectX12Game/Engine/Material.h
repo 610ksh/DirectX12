@@ -38,7 +38,8 @@ public:
 	void SetFloat(uint8 index, float value) { _params.SetFloat(index, value); }
 	void SetTexture(uint8 index, shared_ptr<Texture> texture) { _textures[index] = texture; }
 
-	void Update();
+	// 데이터를 밀언허는것.
+	void PushData();
 
 private:
 	// Shader (세이더)

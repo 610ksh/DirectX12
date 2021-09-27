@@ -11,6 +11,7 @@ class SceneManager
 	DECLARE_SINGLE(SceneManager);
 public:
 	void Update();
+	void Render();
 	void LoadScene(wstring sceneName); // æ¿¿ª ∑ŒµÂ
 
 public:

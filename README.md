@@ -34,7 +34,8 @@
 - [x] Trigonometry & Vector & Matrix (09.21) / https://blog.naver.com/610ksh/222512188442
 - [x] Coordinate Transformation(World, View Matrix) (09.24) / https://blog.naver.com/610ksh/222513116337
 - [x] Projection, Screen Transformation (09.25) / https://blog.naver.com/610ksh/222516565902
-- [ ] Camera (09.27, 28) / https://blog.naver.com/610ksh/222518630108
+- [x] Camera (09.27, 28) / https://blog.naver.com/610ksh/222518630108
+- [ ] Resource (09.29) / 
 
 
 ## :heavy_check_mark: Languages & Library
@@ -99,14 +100,13 @@
 
 ---
 # 🎨Chapter4. Camera & Lighting
-## Lecture1. 시작하기
-### 1. x
+## 4-1. Camera
+![Image](Git_Resources/Chapter4/Camera.gif)
+
+## 4-2. Resource
 ![]()
 
-### 2. x
-![]()
-
-### 3. x
+## 4-3.
 ![]()
 
 ---

@@ -3,6 +3,7 @@
 
 class Transform;
 class MeshRenderer;
+class Camera;
 class MonoBehaviour;
 
 /*
@@ -21,14 +22,19 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
-	void Init();
-
 	void Awake();
 	void Start();
 	void Update();
 	void LateUpdate();
+	void FinalUpdate();
 
+	// 공용 코드
+	shared_ptr<Component> GetFixedComponent(COMPONENT_TYPE type);
+
+	// 개별 요소를 반환
 	shared_ptr<Transform> GetTransform();
+	shared_ptr<MeshRenderer> GetMeshRenderer();
+	shared_ptr<Camera> GetCamera();
 
 	void AddComponent(shared_ptr<Component> component);
 

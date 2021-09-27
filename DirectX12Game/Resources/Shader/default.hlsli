@@ -3,10 +3,13 @@
 // for Transform
 
 // 4바이트 위치 값을 담당
-cbuffer TEST_B0 : register(b0)
+cbuffer TRANSFORM_PARAMS : register(b0)
 {
 	// x,y,z 3개와 1개더 4개의 float
-	float4 offset0;
+	// float4 offset0;
+	
+	// matrix
+	row_major matrix matWVP;
 };
 
 /////////////////////////////////////////////
@@ -63,22 +66,13 @@ VS_OUT VS_Main(VS_IN input)
 {
 	VS_OUT output = (VS_OUT)0;
 	
-	/*output.pos = float4(input.pos, 1.f);
-	output.pos += offset0;
-	output.color = input.color;
-	output.color += offset1;*/
-
-	// 일단 그냥 있는 그대로 넘김
-	output.pos = float4(input.pos, 1.f);
-
-	// b1 레지스터에 있는 float 변수를 이용해서 값을 바꿈!
-	output.pos.x += float_0;
-	output.pos.y += float_1;
-	output.pos.z += float_2;
+	// 넘어온 값을 b0 레지스터의 WVP 행렬과 연산해준다.
+	output.pos = mul(float4(input.pos, 1.f), matWVP);
 
 	// b0 레지스터로 위치값 바꿈. 키보드 입력
-	output.pos += offset0; 
+	//output.pos += offset0; 
 
+	// 색상 결정
 	output.color = input.color;
 	output.uv = input.uv;
 

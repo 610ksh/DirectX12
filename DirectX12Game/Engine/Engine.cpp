@@ -35,7 +35,7 @@ void Engine::Init(const WindowInfo& info)
 	_depthStencilBuffer->Init(_window);
 
 	/// Constant Buffer 생성. Transform 용도와 Material 용도.
-	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformMatrix), 256);
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 256);
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 256);
 
 	ResizeWindow(info.width, info.height); // 화면 크기를 재조정.
@@ -49,6 +49,9 @@ void Engine::Update()
 {
 	GET_SINGLE(Input)->Update();
 	GET_SINGLE(Timer)->Update();
+	
+	// 씬 업데이트
+	GET_SINGLE(SceneManager)->Update();
 
 	// 렌더링
 	Render();
@@ -63,7 +66,7 @@ void Engine::Render()
 
 	/// TODO : 나머지 물체를 그린다.
 	// 해당 씬에 있는 모든 물체를 그린다.
-	GET_SINGLE(SceneManager)->Update();
+	GET_SINGLE(SceneManager)->Render();
 
 	RenderEnd();
 }

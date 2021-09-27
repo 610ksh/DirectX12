@@ -3,7 +3,7 @@
 // std::byte 사용하지 않음
 #define _HAS_STD_BYTE 0 // 이거 넣어주면 됨.
 
-// 각종 include
+/// 표준 C++ 각종 include
 #include <windows.h>
 #include <tchar.h>
 #include <memory> // unique_ptr, make_unique 있음
@@ -18,6 +18,7 @@ using namespace std;
 #include <filesystem>
 namespace fs = std::filesystem; // fs라고 이름을 줄이자
 
+/// 외부 라이브러리
 /*
 	d3dx12.h는 특별하다.
 	공식적으로 만들어진 파일이 아니라,
@@ -27,7 +28,9 @@ namespace fs = std::filesystem; // fs라고 이름을 줄이자
 	
 */
 #include "d3dx12.h" // 외부에서 다운받아 추가함.
+#include "SimpleMath.h"
 
+/// 추가 기능 관련 헤더 추가
 #include <d3d12.h>
 #include <wrl.h>
 #include <d3dcompiler.h>
@@ -65,10 +68,11 @@ using uint8 = unsigned __int8;
 using uint16 = unsigned __int16;
 using uint32 = unsigned __int32;
 using uint64 = unsigned __int64;
-using Vec2 = XMFLOAT2;
-using Vec3 = XMFLOAT3;
-using Vec4 = XMFLOAT4;
-using Matrix = XMMATRIX;
+// 새로운 벡터와 행렬로 수정함.
+using Vec2 = DirectX::SimpleMath::Vector2;
+using Vec3 = DirectX::SimpleMath::Vector3;
+using Vec4 = DirectX::SimpleMath::Vector4;
+using Matrix = DirectX::SimpleMath::Matrix;
 
 // Constant Buffer를 위한 레지스터 번호
 enum class CBV_REGISTER : uint8
@@ -148,6 +152,13 @@ public:								\
 #define DELTA_TIME			GET_SINGLE(Timer)->GetDeltaTime()
 
 #define CONST_BUFFER(type)	GEngine->GetConstantBuffer(type)
+
+
+struct TransformParams
+{
+	Matrix matWVP;
+};
+
 
 // Engine 클래스 전역변수. 일종의 싱글톤 형태. 전방선언까지 해주자.
 extern unique_ptr<class Engine> GEngine; // 외부에서 접근가능(extern)

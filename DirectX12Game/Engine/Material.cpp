@@ -2,7 +2,7 @@
 #include "Material.h"
 #include "Engine.h"
 
-void Material::Update()
+void Material::PushData()
 {
 	/// 1. CBV 업로드
 	// Constant Buffer를 가져와서 값을 넣어 CBV를 만들고 있다.

@@ -23,6 +23,9 @@
     <Filter Include="소스 파일\Manager">
       <UniqueIdentifier>{d4237839-cb7c-4ba1-968a-bedeb3cce4fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\GameObject\Test">
+      <UniqueIdentifier>{5554c5d7-e7ad-4db8-8a8c-6df37c46d703}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -93,6 +96,15 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleMath.cpp">
+      <Filter>소스 파일\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCameraScript.cpp">
+      <Filter>소스 파일\GameObject\Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -168,10 +180,22 @@
     <ClInclude Include="Timer.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="SimpleMath.h">
+      <Filter>소스 파일\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>소스 파일\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCameraScript.h">
+      <Filter>소스 파일\GameObject\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shader\default.hlsli">
       <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="SimpleMath.inl">
+      <Filter>소스 파일\Utils</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -6,6 +6,10 @@
 #include "Material.h"
 #include "GameObject.h"
 #include "MeshRenderer.h"
+#include "Transform.h"
+#include "Camera.h"
+
+#include "TestCameraScript.h"
 
 void SceneManager::Update()
 {
@@ -15,6 +19,23 @@ void SceneManager::Update()
 	// 현재 씬의 Update들을 돌림
 	_activeScene->Update();
 	_activeScene->LateUpdate();
+	_activeScene->FinalUpdate();
+}
+
+// TEMP
+void SceneManager::Render()
+{
+	if (_activeScene == nullptr)
+		return;
+
+	const vector<shared_ptr<GameObject>>& gameObjects = _activeScene->GetGameObjects();
+	for (auto& gameObject : gameObjects)
+	{
+		if (gameObject->GetCamera() == nullptr)
+			continue;
+
+		gameObject->GetCamera()->Render();
+	}
 }
 
 void SceneManager::LoadScene(wstring sceneName)
@@ -37,6 +58,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 	/// 1. 먼저 새로운 씬을 하나 만듦
 	shared_ptr<Scene> scene = make_shared<Scene>();
+
+#pragma region TestObject
 
 	/// 2. TestObject, 1개만 만듦
 	shared_ptr<GameObject> gameObject = make_shared<GameObject>();
@@ -70,8 +93,12 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		indexVec.push_back(3);
 	}
 
-	/// 4. gameObject 초기화
-	gameObject->Init(); // Transform
+	/// 4. Transform Component 추가
+	gameObject->AddComponent(make_shared<Transform>());
+
+	shared_ptr<Transform> transform = gameObject->GetTransform();
+	transform->SetLocalPosition(Vec3(0.f, 100.f, 200.f));
+	transform->SetLocalScale(Vec3(100.f, 100.f, 1.f));
 
 	/// 5. 메시 렌더러 생성
 	shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -103,6 +130,24 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 	/// 9. 현재 씬에 이 gameObject를 벡터에 추가함
 	scene->AddGameObject(gameObject);
+
+#pragma endregion
+
+#pragma region Camera
+	// 카메라 오브젝트 생성
+	shared_ptr<GameObject> camera = make_shared<GameObject>();
+	// 카메라에 컴포넌트 추가 (Transform, Camera)
+	camera->AddComponent(make_shared<Transform>());
+	camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45도
+	
+	// 카메라 이동 스크립트 추가. ★컴포넌트 패턴의 전형적인 방식★
+	camera->AddComponent(make_shared<TestCameraScript>());
+	
+	// 카메라 위치 설정
+	camera->GetTransform()->SetLocalPosition(Vec3(0.f, 100.f, 0.f));
+	// 씬에 카메라 넣어주기
+	scene->AddGameObject(camera);
+#pragma endregion
 
 	return scene;
 }

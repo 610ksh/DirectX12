@@ -24,6 +24,9 @@ public:
 	void Update();
 
 public:
+	// 윈도우 정보 가져옴
+	const WindowInfo& GetWindow() { return _window; }
+
 	// 다른곳에서 각 클래스들이 필요할때마다 가져다 쓸 예정. Engine을 접근하면 다 있음.
 	shared_ptr<Device> GetDevice() { return _device; }
 	shared_ptr<CommandQueue> GetCmdQueue() { return _cmdQueue; }

@@ -13,9 +13,6 @@ public:
 	void SetMesh(shared_ptr<Mesh> mesh) { _mesh = mesh; }
 	void SetMaterial(shared_ptr<Material> material) { _material = material; }
 
-	// Update에서 Render를 사용
-	virtual void Update() override { Render(); }
-
 	// 그리는 용도
 	void Render();
 

@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
+#include "Camera.h"
+
 #include "MonoBehaviour.h"
 
 GameObject::GameObject()
@@ -12,12 +14,6 @@ GameObject::GameObject()
 GameObject::~GameObject()
 {
 
-}
-
-void GameObject::Init()
-{
-	// 모든 물체들이 Transform을 들고 있다고 전제를 함.
-	AddComponent(make_shared<Transform>());
 }
 
 // 이 GameObject가 들고 있는 컴포넌트와 스크립트의 Awake 함수를 호출
@@ -79,12 +75,46 @@ void GameObject::LateUpdate()
 	}
 }
 
+void GameObject::FinalUpdate()
+{
+	for (shared_ptr<Component>& component : _components)
+	{
+		if (component)
+			component->FinalUpdate();
+	}
+
+	// 스크립트에서는 FinalUpdate를 사용하지 못하도록 약속하자.
+}
+
+
+shared_ptr<Component> GameObject::GetFixedComponent(COMPONENT_TYPE type)
+{
+	uint8 index = static_cast<uint8>(type);
+	assert(index < FIXED_COMPONENT_COUNT);
+	return _components[index];
+}
+
 // 이 GameObject가 들고있는 Transform 정보르 넘김
 shared_ptr<Transform> GameObject::GetTransform()
 {
-	uint8 index = static_cast<uint8>(COMPONENT_TYPE::TRANSFORM);
+	//uint8 index = static_cast<uint8>(COMPONENT_TYPE::TRANSFORM);
 	// 스마트 포인터끼리의 casting이라서 static_pointer_cast
-	return static_pointer_cast<Transform>(_components[index]);
+	//return static_pointer_cast<Transform>(_components[index]);
+
+	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::TRANSFORM);
+	return static_pointer_cast<Transform>(component);
+}
+
+shared_ptr<MeshRenderer> GameObject::GetMeshRenderer()
+{
+	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::MESH_RENDERER);
+	return static_pointer_cast<MeshRenderer>(component);
+}
+
+shared_ptr<Camera> GameObject::GetCamera()
+{
+	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::CAMERA);
+	return static_pointer_cast<Camera>(component);
 }
 
 void GameObject::AddComponent(shared_ptr<Component> component)
