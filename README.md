@@ -35,7 +35,7 @@
 - [x] Coordinate Transformation(World, View Matrix) (09.24) / https://blog.naver.com/610ksh/222513116337
 - [x] Projection, Screen Transformation (09.25) / https://blog.naver.com/610ksh/222516565902
 - [x] Camera (09.27, 28) / https://blog.naver.com/610ksh/222518630108
-- [ ] Resource (09.29) / 
+- [ ] Resource (09.30) / 
 
 
 ## :heavy_check_mark: Languages & Library
