@@ -1,9 +1,13 @@
 #pragma once
+#include "Object.h"
 
 // [일감 기술서] 외주 인력들이 뭘 해야할지 기술
-class Shader
+class Shader : public Object
 {
 public:
+	Shader();
+	virtual ~Shader();
+
 	// 최초 쉐이더 생성
 	void Init(const wstring& path);
 	void Update();

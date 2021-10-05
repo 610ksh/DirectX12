@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h" // for FIXED_COMPONENT_COUNT
+#include "Object.h"
 
 class Transform;
 class MeshRenderer;
@@ -16,7 +17,7 @@ class MonoBehaviour;
 	-> 우리는 또 다른 객체를 만들지 않고, 만들어져있는 놈을 스마트 포인터로 만들고 싶은거임.
 	component->SetGameObject(shared_from_this()); 를 사용해야함
 */
-class GameObject : public enable_shared_from_this<GameObject>
+class GameObject : public Object, public enable_shared_from_this<GameObject>
 {
 public:
 	GameObject();

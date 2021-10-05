@@ -8,23 +8,26 @@
     <Filter Include="소스 파일\Engine">
       <UniqueIdentifier>{e003a94d-5db8-405a-9e89-10e58a987600}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Resource">
-      <UniqueIdentifier>{0f7dff27-2edd-4388-a3e4-a387b2e0af4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Utils">
       <UniqueIdentifier>{4adf42ba-285e-47d8-b7dd-fda2360e07c1}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Shader">
       <UniqueIdentifier>{cb0af168-c21a-4504-b3d7-9fd2d3f3e067}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\GameObject">
-      <UniqueIdentifier>{7e222470-9bbe-4913-9682-687ff9cc0017}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Manager">
       <UniqueIdentifier>{d4237839-cb7c-4ba1-968a-bedeb3cce4fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\GameObject\Test">
+    <Filter Include="소스 파일\Object">
+      <UniqueIdentifier>{7e222470-9bbe-4913-9682-687ff9cc0017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Test">
       <UniqueIdentifier>{5554c5d7-e7ad-4db8-8a8c-6df37c46d703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Component">
+      <UniqueIdentifier>{1200293d-ceae-4124-a8f7-427ff4099414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Resource">
+      <UniqueIdentifier>{0f7dff27-2edd-4388-a3e4-a387b2e0af4c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -50,10 +53,10 @@
       <Filter>소스 파일\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>소스 파일\Resource</Filter>
+      <Filter>소스 파일\Object\Resource</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>소스 파일\Resource</Filter>
+      <Filter>소스 파일\Object\Resource</Filter>
     </ClCompile>
     <ClCompile Include="ConstantBuffer.cpp">
       <Filter>소스 파일\Engine</Filter>
@@ -62,28 +65,16 @@
       <Filter>소스 파일\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>소스 파일\Resource</Filter>
+      <Filter>소스 파일\Object\Resource</Filter>
     </ClCompile>
     <ClCompile Include="DepthStencilBuffer.cpp">
       <Filter>소스 파일\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
-      <Filter>소스 파일\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>소스 파일\GameObject</Filter>
+      <Filter>소스 파일\Object\Resource</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>소스 파일\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshRenderer.cpp">
-      <Filter>소스 파일\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>소스 파일\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="MonoBehaviour.cpp">
-      <Filter>소스 파일\GameObject</Filter>
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>소스 파일\Manager</Filter>
@@ -100,11 +91,29 @@
     <ClCompile Include="SimpleMath.cpp">
       <Filter>소스 파일\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="TestCameraScript.cpp">
-      <Filter>소스 파일\GameObject\Test</Filter>
+      <Filter>소스 파일\Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRenderer.cpp">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MonoBehaviour.cpp">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>소스 파일\Object\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,10 +142,10 @@
       <Filter>소스 파일\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>소스 파일\Resource</Filter>
+      <Filter>소스 파일\Object\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>소스 파일\Resource</Filter>
+      <Filter>소스 파일\Object\Resource</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffer.h">
       <Filter>소스 파일\Engine</Filter>
@@ -145,28 +154,16 @@
       <Filter>소스 파일\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>소스 파일\Resource</Filter>
+      <Filter>소스 파일\Object\Resource</Filter>
     </ClInclude>
     <ClInclude Include="DepthStencilBuffer.h">
       <Filter>소스 파일\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
-      <Filter>소스 파일\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>소스 파일\GameObject</Filter>
+      <Filter>소스 파일\Object\Resource</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>소스 파일\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshRenderer.h">
-      <Filter>소스 파일\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>소스 파일\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="MonoBehaviour.h">
-      <Filter>소스 파일\GameObject</Filter>
+      <Filter>소스 파일\Object</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>소스 파일\Manager</Filter>
@@ -183,11 +180,29 @@
     <ClInclude Include="SimpleMath.h">
       <Filter>소스 파일\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>소스 파일\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="TestCameraScript.h">
-      <Filter>소스 파일\GameObject\Test</Filter>
+      <Filter>소스 파일\Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="MonoBehaviour.h">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>소스 파일\Object\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

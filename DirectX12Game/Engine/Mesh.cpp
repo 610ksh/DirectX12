@@ -3,6 +3,16 @@
 #include "Engine.h"
 #include "Material.h"
 
+Mesh::Mesh() : Object(OBJECT_TYPE::MESH)
+{
+
+}
+
+Mesh::~Mesh()
+{
+
+}
+
 //////////////////////////////////////////
 
 // discarded version, only study (초기 방식)

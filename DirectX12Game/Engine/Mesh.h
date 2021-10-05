@@ -1,4 +1,5 @@
 #pragma once
+#include "Object.h"
 
 // 전방선언
 class Material;
@@ -9,9 +10,12 @@ class Material;
 	1. Transform 정보
 	2. Material 정보
 */
-class Mesh
+class Mesh : public Object
 {
 public:
+	Mesh();
+	virtual ~Mesh();
+
 	/// discarded version, only study
 	void Init(vector<Vertex>& vec); 
 

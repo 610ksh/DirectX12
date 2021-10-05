@@ -31,6 +31,8 @@ cbuffer MATERIAL_PARAMS : register(b1)
 	float float_4;
 };
 
+/////////////////////////////////////////////
+
 // Texture
 Texture2D tex_0 : register(t0); // 사용
 Texture2D tex_1 : register(t1);
@@ -38,22 +40,20 @@ Texture2D tex_2 : register(t2);
 Texture2D tex_3 : register(t3);
 Texture2D tex_4 : register(t4);
 
-/////////////////////////////////////////////
-
 // SamplerState
 SamplerState sam_0 : register(s0);
+
+/////////////////////////////////////////////
 
 struct VS_IN
 {
 	float3 pos : POSITION;
-	float4 color : COLOR;
 	float2 uv : TEXCOORD;
 };
 
 struct VS_OUT
 {
 	float4 pos : SV_Position;
-	float4 color : COLOR;
 	float2 uv : TEXCOORD;
 };
 
@@ -68,12 +68,6 @@ VS_OUT VS_Main(VS_IN input)
 	
 	// 넘어온 값을 b0 레지스터의 WVP 행렬과 연산해준다.
 	output.pos = mul(float4(input.pos, 1.f), matWVP);
-
-	// b0 레지스터로 위치값 바꿈. 키보드 입력
-	//output.pos += offset0; 
-
-	// 색상 결정
-	output.color = input.color;
 	output.uv = input.uv;
 
 	return output;

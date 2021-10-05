@@ -35,7 +35,9 @@
 - [x] Coordinate Transformation(World, View Matrix) (09.24) / https://blog.naver.com/610ksh/222513116337
 - [x] Projection, Screen Transformation (09.25) / https://blog.naver.com/610ksh/222516565902
 - [x] Camera (09.27, 28) / https://blog.naver.com/610ksh/222518630108
-- [ ] Resource (10.01) / 
+- [x] Resource (10.05) / https://blog.naver.com/610ksh/222527858327
+- [ ] Lighting 
+
 
 
 ## :heavy_check_mark: Languages & Library
@@ -89,13 +91,13 @@
 ---
 # 🎨Chapter3. Vector & Matrix
 ## Lecture1. 시작하기
-### 3-1. x
+### 3-1. 추가 예정
 ![]()
 
-### 3-2. x
+### 3-2. 추가 예정
 ![]()
 
-### 3-3. x
+### 3-3. 추가 예정
 ![]()
 
 ---
@@ -104,9 +106,9 @@
 ![Image](Git_Resources/Chapter4/Camera.gif)
 
 ## 4-2. Resource
-![]()
+![Image](Git_Resources/Chapter4/Resources.gif)
 
-## 4-3.
+## 4-3. Lighting
 ![]()
 
 ---

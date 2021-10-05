@@ -2,6 +2,16 @@
 #include "Shader.h"
 #include "Engine.h"
 
+Shader::Shader() : Object(OBJECT_TYPE::SHADER)
+{
+
+}
+
+Shader::~Shader()
+{
+
+}
+
 void Shader::Init(const wstring& path)
 {
 	// VertexShader 생성
@@ -16,9 +26,12 @@ void Shader::Init(const wstring& path)
 		// pos는 float 3개. 12바이트
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		// color는 rgba라서 float 4개. 16바이트. -> 12 + 16 = 28 이전까지.
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		//{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		// texture는 28부터 시작함. 32비트 2개 사용함 (R32, G32)
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		/// normal, tangent
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
 	// pipeline에 대한 설명서 내용 기입

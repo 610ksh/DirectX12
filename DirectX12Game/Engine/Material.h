@@ -1,4 +1,5 @@
 #pragma once
+#include "Object.h"
 
 // 전방선언
 class Shader;
@@ -27,9 +28,12 @@ struct MaterialParams
 };
 
 /// Material
-class Material
+class Material : public Object
 {
 public:
+	Material();
+	virtual ~Material();
+
 	shared_ptr<Shader> GetShader() { return _shader; }
 
 	// setter
