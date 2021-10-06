@@ -10,6 +10,7 @@
 /// CostantBuffer 용도 구분
 enum class CONSTANT_BUFFER_TYPE : uint8
 {
+	GLOBAL,
 	TRANSFORM,
 	MATERIAL,
 	END // for counting
@@ -29,9 +30,13 @@ public:
 
 	// reg : 어떤 용도인지
 	void Init(CBV_REGISTER reg, uint32 size, uint32 count);
-
+	
+	// 일반적인 레지스터들을 위한 것.
 	void Clear();
 	void PushData(void* buffer, uint32 size);
+
+	/// 전역 레지스터(b0)을 위한 PushData
+	void SetGlobalData(void* buffer, uint32 size);
 
 	D3D12_GPU_VIRTUAL_ADDRESS GetGpuVirtualAddress(uint32 index);
 	// Handle값을 계산해주는 함수

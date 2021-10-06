@@ -11,6 +11,14 @@ public:
 	void LateUpdate();
 	void FinalUpdate();
 
+	/// 렌더
+	void Render();
+
+private:
+	// 빛 정보를 GPU 쪽으로 넣어주는 함수
+	void PushLightData();
+
+public:
 	void AddGameObject(shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(shared_ptr<GameObject> gameObject);
 

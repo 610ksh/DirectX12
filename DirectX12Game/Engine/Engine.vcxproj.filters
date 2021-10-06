@@ -115,6 +115,9 @@
     <ClCompile Include="Transform.cpp">
       <Filter>소스 파일\Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="Transform.h">
       <Filter>소스 파일\Object\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Shader\default.hlsli">
@@ -211,6 +217,12 @@
     </None>
     <None Include="SimpleMath.inl">
       <Filter>소스 파일\Utils</Filter>
+    </None>
+    <None Include="..\Resources\Shader\params.hlsli">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
+    <None Include="..\Resources\Shader\utils.hlsli">
+      <Filter>소스 파일\Shader</Filter>
     </None>
   </ItemGroup>
 </Project>

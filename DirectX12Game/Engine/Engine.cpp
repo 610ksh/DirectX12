@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "Material.h" // for MaterialParams
 #include "Transform.h" // for TransformMatrix
+#include "Light.h"
 
 // 장치 관련 헤더
 #include "Input.h"
@@ -34,9 +35,11 @@ void Engine::Init(const WindowInfo& info)
 	// 학습을 목적으로 전체적으로 어떤 구조인지 이해하기 위해 나두도록 하자.
 	_depthStencilBuffer->Init(_window);
 
-	/// Constant Buffer 생성. Transform 용도와 Material 용도.
-	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(TransformParams), 256);
-	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(MaterialParams), 256);
+	/// b0는 LightParams 용도로 사용할거임. 딱 1개만 셋팅하면 되니까 CBV size를 1로 해줌.
+	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(LightParams), 1);
+	/// Constant Buffer 생성. Transform 용도와 Material 용도. b0는 전역 용도
+	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(TransformParams), 256); // b1로 밀어넣음
+	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 256); // b2로 밀어넣음
 
 	ResizeWindow(info.width, info.height); // 화면 크기를 재조정.
 

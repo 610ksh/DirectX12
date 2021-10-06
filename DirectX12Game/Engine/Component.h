@@ -7,6 +7,7 @@ enum class COMPONENT_TYPE : uint8
 	TRANSFORM, // 0
 	MESH_RENDERER,
 	CAMERA,
+	LIGHT,
 	// ...
 
 	// 참고로 모노비헤이비어가 마지막에 등장해야함.

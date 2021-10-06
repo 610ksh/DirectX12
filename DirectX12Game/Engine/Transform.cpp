@@ -40,9 +40,14 @@ void Transform::PushData()
 {
 	// WVP를 만들어서 곱해줘서 넘겨줘야함.
 	// 현재는 [W] 까지 위에서 만들어놨음.
-
+	TransformParams transformParams = {};
+	transformParams.matWorld = _matWorld;
+	transformParams.matView = Camera::S_MatView;
+	transformParams.matProjection = Camera::S_MatProjection;
+	transformParams.matWV = _matWorld * Camera::S_MatView;
 	// W V P 순서대로 곱해주자.
-	Matrix matWVP = _matWorld * Camera::S_MatView * Camera::S_MatProjection;
+	transformParams.matWVP = _matWorld * Camera::S_MatView * Camera::S_MatProjection;
+
 	// 이미 만들어놓고 예약 지정해둔 상수버퍼(b0)에 WVP행렬을 밀어넣어줌. 실제로 들어감.
-	CONST_BUFFER(CONSTANT_BUFFER_TYPE::TRANSFORM)->PushData(&matWVP, sizeof(matWVP));
+	CONST_BUFFER(CONSTANT_BUFFER_TYPE::TRANSFORM)->PushData(&transformParams, sizeof(transformParams));
 }

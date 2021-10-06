@@ -9,7 +9,7 @@ void TableDescriptorHeap::Init(uint32 count)
 
 	// DESCRIPTOR_HEAP 설명서 제작
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-	desc.NumDescriptors = count * REGISTER_COUNT; // 그룹 개수 * 한 그룹에 존재하는 레지스터 개수
+	desc.NumDescriptors = count * (REGISTER_COUNT - 1); // b0는 전역이라서 -1해줌 // 그룹 개수 * 한 그룹에 존재하는 레지스터 개수
 	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; // FLAG_SHADER_VISIBLE로 해줘야한다. NONE하면 안됨.
 	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV; // TYPE_CBV로 이용한다고 선언
 
@@ -17,7 +17,7 @@ void TableDescriptorHeap::Init(uint32 count)
 
 	// 핸들 사이즈와 그룹 사이즈 값을 미리 계산해두자.
 	_handleSize = DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	_groupSize = _handleSize * REGISTER_COUNT; // 한 그룹의 전체 사이즈
+	_groupSize = _handleSize * (REGISTER_COUNT - 1); // b0는 전역 // 한 그룹의 전체 사이즈
 }
 
 // 한 프레임 이후 초기화 용도
@@ -81,9 +81,11 @@ D3D12_CPU_DESCRIPTOR_HANDLE TableDescriptorHeap::GetCPUHandle(SRV_REGISTER reg)
 // 숫자로 들어오는 경우
 D3D12_CPU_DESCRIPTOR_HANDLE TableDescriptorHeap::GetCPUHandle(uint8 reg)
 {
+	assert(reg > 0); // 0보다 크면 통과. 아니면 에러
+
 	// 시작 핸들 주소값을 가져오고 있음.
 	D3D12_CPU_DESCRIPTOR_HANDLE handle = _descHeap->GetCPUDescriptorHandleForHeapStart();
 	handle.ptr += _currentGroupIndex * _groupSize; // 원하는 그룹 인덱스로 이동함. (크게 점프, 몇동)
-	handle.ptr += reg * _handleSize; // 마지막으로 내부에서 원하는 레지스터 만큼 번호를 이동함. (내부에서 이동, 몇호)
+	handle.ptr += (reg - 1) * _handleSize; // 마지막으로 내부에서 원하는 레지스터 만큼 번호를 이동함. (내부에서 이동, 몇호)
 	return handle; // 최종 주소값 결과를 넘김
 }

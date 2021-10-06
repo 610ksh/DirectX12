@@ -14,15 +14,17 @@ void RootSignature::CreateRootSignature()
 	CD3DX12_DESCRIPTOR_RANGE ranges[] = // 배열 형태라서 더 추가할 수 있다.
 	{
 		// (1.용도 : TYPE_CBV 형태, 2.몇개를 활용하고 싶은지, 3.몇번부터 레지스터를 쓰고 싶은지)
-		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, CBV_REGISTER_COUNT, 0), // b0~b4
+		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, CBV_REGISTER_COUNT - 1, 1), // b1~b4
 		// SRV 전용.
 		CD3DX12_DESCRIPTOR_RANGE(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, SRV_REGISTER_COUNT, 0), // t0~t4 
 	};
 
 	// Root parameter를 2개 생성함.
-	CD3DX12_ROOT_PARAMETER param[1];
+	CD3DX12_ROOT_PARAMETER param[2];
+	// root CBV 방식으로 추가. b0 레지스터를 사용. 전역으로 사용할 녀석을 선언한 셈
+	param[0].InitAsConstantBufferView(static_cast<uint32>(CBV_REGISTER::b0)); // b0
 	// 레지스터에 Descriptor table 생성. 전체 크기(개수)와 시작주소를 넘겨줘야함.
-	param[0].InitAsDescriptorTable(_countof(ranges), ranges);
+	param[1].InitAsDescriptorTable(_countof(ranges), ranges);
 
 	// ConstantBufferView(CBV) 형태로 레지스터에 초기화하겠다는 명령어.
 	//param[0].InitAsConstantBufferView(0); // 0번 -> b0 레지스터 사용
