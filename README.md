@@ -36,7 +36,23 @@
 - [x] Projection, Screen Transformation (09.25) / https://blog.naver.com/610ksh/222516565902
 - [x] Camera (09.27, 28) / https://blog.naver.com/610ksh/222518630108
 - [x] Resource (10.05) / https://blog.naver.com/610ksh/222527858327
-- [ ] Lighting 
+- [x] Lighting (10.06) / https://blog.naver.com/610ksh/222528751409
+- [ ] Normal Mapping
+- [ ] Skybox
+- [ ] Frustum Culling
+- [ ] Quaternion
+- [ ] Orthographic projection
+- [ ] Render Target
+- [ ] Deferred Rendering
+- [ ] Compute Shader
+- [ ] Particle System
+- [ ] Instancing
+- [ ] Shadow Mapping
+- [ ] Tessellation
+- [ ] Terrain
+- [ ] Picking
+- [ ] Mesh
+- [ ] Animation
 
 
 
@@ -109,7 +125,7 @@
 ![Image](Git_Resources/Chapter4/Resources.gif)
 
 ## 4-3. Lighting
-![]()
+![Image](Git_Resources/Chapter4/Lighting.gif)
 
 ---
 # 🎨Chapter5. Quaternion

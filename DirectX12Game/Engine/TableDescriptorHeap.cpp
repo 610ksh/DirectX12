@@ -60,7 +60,7 @@ void TableDescriptorHeap::CommitTable()
 	handle.ptr += _currentGroupIndex * _groupSize;
 
 	// 0번 Param[0]의 내용과 핸들값으로 넘김.
-	CMD_LIST->SetGraphicsRootDescriptorTable(0, handle); // 연결짓도록 예약.
+	CMD_LIST->SetGraphicsRootDescriptorTable(1, handle); // 연결짓도록 예약.
 
 	_currentGroupIndex++; // 그룹 인덱스 증가시킴. 일종의 커서용
 }

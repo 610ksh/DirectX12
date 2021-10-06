@@ -111,7 +111,7 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 	D3D12_CPU_DESCRIPTOR_HANDLE backBufferView = _swapChain->GetBackRTV();
 	
 	// 현재 backbuffer의 rtv를 초기화해준다. 종이를 리셋시켜줌.
-	_cmdList->ClearRenderTargetView(backBufferView, Colors::LightSteelBlue, 0, nullptr);
+	_cmdList->ClearRenderTargetView(backBufferView, Colors::Black, 0, nullptr);
 
 	/// DepthStencilView
 	D3D12_CPU_DESCRIPTOR_HANDLE depthStencilView = GEngine->GetDepthStencilBuffer()->GetDSVCpuHandle();
