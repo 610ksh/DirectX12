@@ -128,7 +128,7 @@
 ![Image](Git_Resources/Chapter4/Lighting.gif)
 
 ## 4-4. Normal Mapping
-![Image](Git_Resources/Chapter4/Normal mapping.png)
+![Image](Git_Resources/Chapter4/Normal_Mapping.png)
 
 ---
 # 🎨Chapter5. Quaternion
