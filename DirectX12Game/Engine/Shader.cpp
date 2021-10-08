@@ -12,7 +12,7 @@ Shader::~Shader()
 
 }
 
-void Shader::Init(const wstring& path)
+void Shader::Init(const wstring& path, ShaderInfo info)
 {
 	// VertexShader 생성
 	CreateVertexShader(path, "VS_Main", "vs_5_0"); // 메인함수 생성
@@ -49,6 +49,47 @@ void Shader::Init(const wstring& path)
 	_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_pipelineDesc.SampleDesc.Count = 1;
 	_pipelineDesc.DSVFormat = GEngine->GetDepthStencilBuffer()->GetDSVFormat(); // DSVFormat 초기화
+
+	/// ShaderInfo 설정. rasterizerType
+	switch (info.rasterizerType)
+	{
+	case RASTERIZER_TYPE::CULL_BACK:
+		_pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+		_pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+		break;
+	case RASTERIZER_TYPE::CULL_FRONT:
+		_pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+		_pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
+		break;
+	case RASTERIZER_TYPE::CULL_NONE:
+		_pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+		_pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+		break;
+	case RASTERIZER_TYPE::WIREFRAME:
+		_pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+		_pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+		break;
+	}
+	/// ShaderInfo 설정. depthStencilType
+	switch (info.depthStencilType)
+	{
+	case DEPTH_STENCIL_TYPE::LESS:
+		_pipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		_pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+		break;
+	case DEPTH_STENCIL_TYPE::LESS_EQUAL:
+		_pipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		_pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		break;
+	case DEPTH_STENCIL_TYPE::GREATER:
+		_pipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		_pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_GREATER;
+		break;
+	case DEPTH_STENCIL_TYPE::GREATER_EQUAL:
+		_pipelineDesc.DepthStencilState.DepthEnable = TRUE;
+		_pipelineDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_GREATER_EQUAL;
+		break;
+	}
 
 	// GraphicsPipelineState 생성
 	DEVICE->CreateGraphicsPipelineState(&_pipelineDesc, IID_PPV_ARGS(&_pipelineState));

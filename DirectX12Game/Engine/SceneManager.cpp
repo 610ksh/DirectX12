@@ -172,6 +172,34 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	
 #pragma endregion
 
+#pragma region SkyBox
+	{
+		shared_ptr<GameObject> skybox = make_shared<GameObject>();
+		skybox->AddComponent(make_shared<Transform>()); // transform을 굳이 설정안함. 디폴트값.
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh(); // 구로 사용
+			meshRenderer->SetMesh(sphereMesh);
+		}
+		{
+			// high resolution space hdri
+			shared_ptr<Shader> shader = make_shared<Shader>();
+			shared_ptr<Texture> texture = make_shared<Texture>();
+			// Skybox에 대한 전용 세이더를 만들어줘야한다.
+			shader->Init(L"..\\Resources\\Shader\\skybox.hlsli",
+				// 이니셜라이즈 리스트 방식을 이용함. C++11, CULL_NONE은 모두 다 그리는거임. FRONT도 문제없음
+				{ RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_EQUAL }); // 옵션값을 넣어줌.
+			texture->Init(L"..\\Resources\\Texture\\Sky01.jpg");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			material->SetTexture(0, texture);
+			meshRenderer->SetMaterial(material);
+		}
+		skybox->AddComponent(meshRenderer);
+		scene->AddGameObject(skybox);
+	}
+#pragma endregion
+
 #pragma region Cube
 	
 	{

@@ -12,8 +12,10 @@ enum class KEY_TYPE
 	S = 'S',
 	D = 'D',
 
-	Q = 'Q',
-	E = 'E',
+	Q = 'Q', // up
+	E = 'E', // down
+	Z = 'Z', // left rotation
+	C = 'C', // right rotation
 };
 
 enum class KEY_STATE

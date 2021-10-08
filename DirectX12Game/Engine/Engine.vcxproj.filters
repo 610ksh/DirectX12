@@ -224,5 +224,8 @@
     <None Include="..\Resources\Shader\utils.hlsli">
       <Filter>소스 파일\Shader</Filter>
     </None>
+    <None Include="..\Resources\Shader\skybox.hlsli">
+      <Filter>소스 파일\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

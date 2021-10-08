@@ -37,8 +37,8 @@
 - [x] Camera (09.27, 28) / https://blog.naver.com/610ksh/222518630108
 - [x] Resource (10.05) / https://blog.naver.com/610ksh/222527858327
 - [x] Lighting (10.06) / https://blog.naver.com/610ksh/222528751409
-- [x] Normal Mapping (10.08) / https://blog.naver.com/610ksh/222530689058
-- [ ] Skybox
+- [x] Normal Mapping (10.07) / https://blog.naver.com/610ksh/222530689058
+- [x] Skybox (10.08) / https://blog.naver.com/610ksh/222531160911
 - [ ] Frustum Culling
 - [ ] Quaternion
 - [ ] Orthographic projection
@@ -129,6 +129,9 @@
 
 ## 4-4. Normal Mapping
 ![Image](Git_Resources/Chapter4/Normal_Mapping.png)
+
+## 4-5. Skybox
+![Image](Git_Resources/Chapter4/Skybox.gif)
 
 ---
 # 🎨Chapter5. Quaternion
