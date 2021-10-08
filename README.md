@@ -62,6 +62,7 @@
 - DirectX12
 - d3dx12.h (Helper 클래스) / https://github.com/microsoft/DirectX-Graphics-Samples/blob/master/Libraries/D3D12RaytracingFallback/Include/d3dx12.h
 - DirectXTex (MS, 이미지 파일 업로드 라이브러리) / https://github.com/microsoft/DirectXTex
+- dx12 SimpleMath.h / https://github.com/microsoft/DirectXTK12
 - gitignore : Visual Studio, C++
 
 ---
