@@ -10,7 +10,7 @@ enum class LIGHT_TYPE : uint8
 
 struct LightColor
 {
-	Vec4 diffuse;
+	Vec4 diffuse; // RGB + 패딩4byte = V
 	Vec4 ambient;
 	Vec4 specular;
 };
@@ -21,9 +21,9 @@ struct LightInfo
 	LightColor	color; // DAS
 	Vec4		position; // 빛의 위치
 	Vec4		direction; // 빛이 쏘는 방향
-	int32		lightType; // uint8이 아니라 32로 한 이유는 세이더쪽과 패딩을 맞춰주기 위해서임
-	float		range; // 빛의 최대 범위
-	float		angle; // 빛이 쏘는 각도 spot에서 사용
+	int32 		lightType; // uint8이 아니라 32로 한 이유는 세이더쪽과 패딩을 맞춰주기 위해서임
+	float 		range; // 빛의 최대 범위
+	float 		angle; // 빛이 쏘는 각도 spot에서 사용
 	int32		padding; // 아무 의미x, 데이터 사이즈를 16바이트의 배수를 위해 필요.
 };
 
@@ -31,7 +31,7 @@ struct LightInfo
 struct LightParams
 {
 	uint32		lightCount; // 조명의 개수
-	Vec3		padding; // 패딩값
+	Vec3 		padding; // 패딩값
 	LightInfo	lights[50]; // 조명 최대 50개를 넣어줌.
 };
 

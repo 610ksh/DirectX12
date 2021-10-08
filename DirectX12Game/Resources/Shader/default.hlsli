@@ -11,6 +11,7 @@ struct VS_IN
 	float3 pos : POSITION;
 	float2 uv : TEXCOORD;
 	float3 normal : NORMAL; // added for Light
+	float3 tangent : TANGENT;
 };
 
 struct VS_OUT
@@ -19,6 +20,8 @@ struct VS_OUT
 	float2 uv : TEXCOORD;
 	float3 viewPos : POSITION; // added for Light
 	float3 viewNormal : NORMAL; // added for Light
+	float3 viewTangent : TANGENT;
+	float3 viewBinormal : BINORMAL;
 };
 
 /////////////////////////////////////////////
@@ -42,6 +45,12 @@ VS_OUT VS_Main(VS_IN input)
 	// 방향벡터는 마지막에 0을 넣어줘야함. 그래야 translation이 적용 안됨.
 	output.viewNormal = normalize(mul(float4(input.normal, 0.f), g_matWV).xyz); 
 
+	// tangent값이 처음에 넘어올때는 Local 좌표계라서 WV로 곱해주면 viwe 좌표계로 바꿀수 있다.
+	output.viewTangent = normalize(mul(float4(input.tangent, 0.f), g_matWV).xyz);
+	// tangent와 normal값을 외적해주면 binormal이 된다.
+	// 왼손좌표계이다. 순서 주의하자. tangent가 먼저다. (T, B, N). normal을 먼저해주면 반대방향으로 나온다
+	output.viewBinormal = normalize(cross(output.viewTangent, output.viewNormal));
+
 	/// 3. 이 다음으로 레스터라이저가 이 값들을 받아서 평균값으로 중간 픽셀들을 보간해서 셋팅해줌. 그걸 PS가 받음
 	return output;
 }
@@ -49,14 +58,39 @@ VS_OUT VS_Main(VS_IN input)
 // PS = Pixel Shader
 float4 PS_Main(VS_OUT input) : SV_Target
 {
+	// 흰색 고정값
+	float4 color = float4(1.f, 1.f, 1.f, 1.f);
+	// 텍스처 0번이 존재한다면
+	if (g_tex_on_0)
+		// 기존 색깔을 텍스처 색상으로 바꿔줌.
+		color = g_tex_0.Sample(g_sam_0, input.uv);
+	
+
+	// 처음에 설정한 디폴트 Normal 값 초기화
+	float3 viewNormal = input.viewNormal;
+
+	// 만약 노말맵이 존재한다면(1번)
+	if (g_tex_on_1)
+	{
+		// 노말맵에서 샘플러를 통해 u,v를 추출
+		// [0,255] 범위에서 [0,1]로 변환됨(레스터라이저가 해줬음)
+		float3 tangentSpaceNormal = g_tex_1.Sample(g_sam_0, input.uv).xyz;
+		// [0,1] 범위에서 [-1,1]로 변환
+		tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
+		// 변환행렬 만들기. TS -> VS로 바꾸는 행렬임. (viewT, viewB, viewN)을 넣음. float3
+		float3x3 matTBN = { input.viewTangent, input.viewBinormal, input.viewNormal };
+		// tangentSpaceNormal에 TBN 행렬을 곱하면 view좌표계 기준의 Normal값을 구할 수 있게됨.
+		viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
+	}
+
 	// tex_0는 위에서 t0 레지스터 변수를 의미함.
 	// t0에 있는 (u,v)를 어떤 정책으로(Sampler) 색상을 결정할지 설정해줌.
 	// 정책은 이미 sam_0 변수에 들어가 있는 상태.
 	// Sample이라는 함수를 통해 들어온 uv 값을 변경시키는거임.
-	//float4 color = tex_0.Sample(g_sam_0, input.uv);
+	//float4 color = g_tex_0.Sample(g_sam_0, input.uv);
 	
 	// 현재 물체의 색상을 흰색으로 고정시킴(RGBA)
-	float4 color = float4(1.f, 1.f, 1.f, 1.f);
+	//float4 color = float4(1.f, 1.f, 1.f, 1.f);
 	
 	// LightColor 변수 0으로 초기화 (diffuse, ambient, specular)
 	LightColor totalColor = (LightColor)0.f;
@@ -65,7 +99,7 @@ float4 PS_Main(VS_OUT input) : SV_Target
 	for (int i = 0; i < g_lightCount; ++i)
 	{
 		// utils.hlsli에 있는 함수 사용. diffuse, ambient, specular를 계산해줌.
-		LightColor color = CalculateLightColor(i, input.viewNormal, input.viewPos);
+		LightColor color = CalculateLightColor(i, viewNormal, input.viewPos);
 		totalColor.diffuse += color.diffuse;
 		totalColor.ambient += color.ambient;
 		totalColor.specular += color.specular;
