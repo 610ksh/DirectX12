@@ -38,9 +38,12 @@ public:
 	shared_ptr<MeshRenderer> GetMeshRenderer();
 	shared_ptr<Camera> GetCamera();
 	shared_ptr<Light> GetLight();
-
-
+	
 	void AddComponent(shared_ptr<Component> component);
+
+	// setter, getter
+	void SetCheckFrustum(bool checkFrustum) { _checkFrustum = checkFrustum; }
+	bool GetCheckFrustum() { return _checkFrustum; }
 
 private:
 	// component를 array로 들고 있음.
@@ -48,5 +51,7 @@ private:
 	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> _components;
 	// 유저가 나중에 MonoBehaviour라는 스크립트를 상속받아 커스텀으로 만든 컴포넌트는 따로 관리
 	vector<shared_ptr<MonoBehaviour>> _scripts;
+
+	bool _checkFrustum = true; // 컬링할지 안할지 판별용도.
 };
 

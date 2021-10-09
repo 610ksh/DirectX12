@@ -39,7 +39,7 @@
 - [x] Lighting (10.06) / https://blog.naver.com/610ksh/222528751409
 - [x] Normal Mapping (10.07) / https://blog.naver.com/610ksh/222530689058
 - [x] Skybox (10.08) / https://blog.naver.com/610ksh/222531160911
-- [ ] Frustum Culling
+- [x] Frustum Culling / https://blog.naver.com/610ksh/222531953169
 - [ ] Quaternion
 - [ ] Orthographic projection
 - [ ] Render Target
@@ -107,7 +107,6 @@
 
 ---
 # 🎨Chapter3. Vector & Matrix
-## Lecture1. 시작하기
 ### 3-1. 추가 예정
 ![]()
 
@@ -133,6 +132,9 @@
 
 ## 4-5. Skybox
 ![Image](Git_Resources/Chapter4/Skybox.gif)
+
+## 4-5. Skybox
+![Image](Git_Resources/Chapter4/Frustum_Culling.png)
 
 ---
 # 🎨Chapter5. Quaternion

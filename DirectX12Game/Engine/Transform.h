@@ -16,6 +16,9 @@ public:
 	const Vec3& GetLocalRotation() { return _localRotation; }
 	const Vec3& GetLocalScale() { return _localScale; }
 
+	/// TEMP 임시용으로 대충 꼼수로 지정함. 정확하지 않게.
+	float GetBoundingSphereRadius() { return max(max(_localScale.x, _localScale.y), _localScale.z); }
+
 	const Matrix& GetLocalToWorldMatrix() { return _matWorld; }
 	const Vec3 GetWorldPosition() { return _matWorld.Translation(); }
 

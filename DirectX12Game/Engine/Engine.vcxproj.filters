@@ -118,6 +118,9 @@
     <ClCompile Include="Light.cpp">
       <Filter>소스 파일\Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -208,6 +211,9 @@
       <Filter>소스 파일\Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
+      <Filter>소스 파일\Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
       <Filter>소스 파일\Object\Component</Filter>
     </ClInclude>
   </ItemGroup>

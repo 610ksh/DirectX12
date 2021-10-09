@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Frustum.h"
 
 // 카메라 방식
 enum class PROJECTION_TYPE
@@ -30,6 +31,8 @@ private:
 	// 선언과 초기화를 해줌.
 	Matrix _matView = {};
 	Matrix _matProjection = {};
+
+	Frustum _frustum;
 
 public:
 	// TEMP (임시적으로 static 사용)
