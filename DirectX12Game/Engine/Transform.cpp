@@ -17,6 +17,7 @@ void Transform::FinalUpdate()
 {
 	/// 1. W(월드) 행렬을 만듦
 	Matrix matScale = Matrix::CreateScale(_localScale); // S
+
 	Matrix matRotation = Matrix::CreateRotationX(_localRotation.x); // Rx
 	matRotation *= Matrix::CreateRotationY(_localRotation.y); // Ry
 	matRotation *= Matrix::CreateRotationZ(_localRotation.z); // Rz

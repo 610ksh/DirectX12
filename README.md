@@ -40,9 +40,9 @@
 - [x] Normal Mapping (10.07) / https://blog.naver.com/610ksh/222530689058
 - [x] Skybox (10.08) / https://blog.naver.com/610ksh/222531160911
 - [x] Frustum Culling (10.09) / https://blog.naver.com/610ksh/222531953169
-- [ ] Quaternion (10.10)
-- [ ] Orthographic projection
-- [ ] Render Target
+- [x] Quaternion (10.10) / https://blog.naver.com/610ksh/222532786353
+- [ ] Orthographic projection (10.17 예정)
+- [ ] Render Target (10. 18예정)
 - [ ] Deferred Rendering
 - [ ] Compute Shader
 - [ ] Particle System
@@ -138,14 +138,13 @@
 
 ---
 # 🎨Chapter5. Quaternion
-## Lecture1. 시작하기
-### 1. x
+### 1. 추가 예정
 ![]()
 
-### 2. x
+### 2. 추가 예정
 ![]()
 
-### 3. x
+### 3. 추가 예정
 ![]()
 
 ---
