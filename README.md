@@ -41,8 +41,8 @@
 - [x] Skybox (10.08) / https://blog.naver.com/610ksh/222531160911
 - [x] Frustum Culling (10.09) / https://blog.naver.com/610ksh/222531953169
 - [x] Quaternion (10.10) / https://blog.naver.com/610ksh/222532786353
-- [ ] Orthographic projection (10.22 예정)
-- [ ] Render Target (10. 23 예정)
+- [ ] Orthographic projection (미정 - 3N 면접 준비중)
+- [ ] Render Target (미정)
 - [ ] Deferred Rendering
 - [ ] Compute Shader
 - [ ] Particle System
