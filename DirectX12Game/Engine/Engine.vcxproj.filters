@@ -218,20 +218,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Resources\Shader\default.hlsli">
-      <Filter>소스 파일\Shader</Filter>
-    </None>
     <None Include="SimpleMath.inl">
       <Filter>소스 파일\Utils</Filter>
     </None>
-    <None Include="..\Resources\Shader\params.hlsli">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Resources\Shader\params.fx">
       <Filter>소스 파일\Shader</Filter>
-    </None>
-    <None Include="..\Resources\Shader\utils.hlsli">
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\skybox.fx">
       <Filter>소스 파일\Shader</Filter>
-    </None>
-    <None Include="..\Resources\Shader\skybox.hlsli">
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\utils.fx">
       <Filter>소스 파일\Shader</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\forward.fx">
+      <Filter>소스 파일\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

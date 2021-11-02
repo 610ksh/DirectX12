@@ -34,16 +34,17 @@ void Camera::FinalUpdate()
 	else
 		_matProjection = ::XMMatrixOrthographicLH(width * _scale, height * _scale, _near, _far);
 
-	/// 임시 static 변수에 넣어줌
-	S_MatView = _matView;
-	S_MatProjection = _matProjection;
-
 	/// Frustum Culling을 위한 코드
 	_frustum.FinalUpdate();
 }
 
 void Camera::Render()
 {
+	/// 임시 static 변수에 넣어줌
+	S_MatView = _matView;
+	S_MatProjection = _matProjection;
+
+
 	// 현재 카메라가 소속된 전체 하나의 Scene을 가져옴 (싱글톤 이용)
 	shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetActiveScene();
 
@@ -54,7 +55,12 @@ void Camera::Render()
 	{
 		if (gameObject->GetMeshRenderer() == nullptr)
 			continue;
-		/// Frustum Culling 부분
+		
+		/// Layer를 통한 컬링.
+		if (IsCulled(gameObject->GetLayerIndex()))
+			continue; // 컬링 대상이면 Render안하고 넘어감. 무시.
+
+		/// Frustum Culling 부분 (상대적으로 무거움)
 		// Frustum check를 해야하는 물체인지 판별. skybox같은건 false
 		// 컬링할거면 Render안하고 continue때림
 		if (gameObject->GetCheckFrustum()) // 일단 기준이 맞으면 내부로

@@ -44,12 +44,40 @@ void SceneManager::LoadScene(wstring sceneName)
 	_activeScene->Start();
 }
 
+
+void SceneManager::SetLayerName(uint8 index, const wstring& name)
+{
+	// 기존 데이터 삭제
+	const wstring& prevName = _layerNames[index];
+	_layerIndex.erase(prevName);
+
+	_layerNames[index] = name;
+	_layerIndex[name] = index;
+}
+
+uint8 SceneManager::LayerNameToIndex(const wstring& name)
+{
+	auto findIt = _layerIndex.find(name);
+	if (findIt == _layerIndex.end())
+		return 0;
+
+	return findIt->second;
+}
+
+
+
 // 테스트로 하는 씬
 shared_ptr<Scene> SceneManager::LoadTestScene()
 {
 	// 기존의 테스트 코드를 복붙하자. 최초의 초기화 부분
 
-	/// 1. 먼저 새로운 씬을 하나 만듦
+	/// 1. 레이어 설정
+#pragma region LayerMask
+	SetLayerName(0, L"Default");
+	SetLayerName(1, L"UI");
+#pragma endregion
+
+	/// 2. 먼저 새로운 씬을 하나 만듦
 	shared_ptr<Scene> scene = make_shared<Scene>();
 
 #pragma region TestObject
@@ -128,21 +156,43 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 #pragma region Camera
-	// 카메라 오브젝트 생성
-	shared_ptr<GameObject> camera = make_shared<GameObject>();
-	// 카메라에 컴포넌트 추가 (Transform, Camera)
-	camera->AddComponent(make_shared<Transform>());
-	camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45도
-	// 카메라 이동 스크립트 추가. ★컴포넌트 패턴의 전형적인 방식★
-	camera->AddComponent(make_shared<TestCameraScript>());
-	// 카메라 위치 설정
-	camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-	// 씬에 카메라 넣어주기
-	scene->AddGameObject(camera);
+	{
+		// 카메라 오브젝트 생성
+		shared_ptr<GameObject> camera = make_shared<GameObject>();
+		camera->SetName(L"Main_Camera");
+		// 카메라에 컴포넌트 추가 (Transform, Camera)
+		camera->AddComponent(make_shared<Transform>());
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45도
+		// 카메라 이동 스크립트 추가. ★컴포넌트 패턴의 전형적인 방식★
+		camera->AddComponent(make_shared<TestCameraScript>());
+		// 카메라 위치 설정
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+		// UI Layer는 컬링 지정
+		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI는 안 찍음
+		// 씬에 카메라 넣어주기
+		scene->AddGameObject(camera);
+	}
 #pragma endregion
 
+#pragma region UI_Camera
+	{
+		shared_ptr<GameObject> camera = make_shared<GameObject>();
+		camera->SetName(L"Orthographic_Camera");
+		camera->AddComponent(make_shared<Transform>());
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, 800*600
+		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+		camera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
+		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
+		camera->GetCamera()->SetCullingMaskAll(); // 다 끄고
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI만 찍음
+		scene->AddGameObject(camera);
+	}
+#pragma endregion
+
+
 #pragma region Sphere
-	
+	/*
 	{
 		shared_ptr<GameObject> sphere = make_shared<GameObject>();
 		sphere->AddComponent(make_shared<Transform>());
@@ -157,7 +207,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			shared_ptr<Shader> shader = make_shared<Shader>();
 			shared_ptr<Texture> texture = make_shared<Texture>();
 			shared_ptr<Texture> texture2 = make_shared<Texture>(); // normal
-			shader->Init(L"..\\Resources\\Shader\\default.hlsli");
+			shader->Init(L"..\\Resources\\Shader\\default.fx");
 			texture->Init(L"..\\Resources\\Texture\\Wallpaper.jpg");
 			texture2->Init(L"..\\Resources\\Texture\\Wallpaper_Normal.jpg");
 			shared_ptr<Material> material = make_shared<Material>();
@@ -169,7 +219,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		sphere->AddComponent(meshRenderer);
 		scene->AddGameObject(sphere);
 	}
-	
+	*/
 #pragma endregion
 
 #pragma region SkyBox
@@ -184,13 +234,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		}
 		{
 			// high resolution space hdri
-			shared_ptr<Shader> shader = make_shared<Shader>();
-			shared_ptr<Texture> texture = make_shared<Texture>();
-			// Skybox에 대한 전용 세이더를 만들어줘야한다.
-			shader->Init(L"..\\Resources\\Shader\\skybox.hlsli",
-				// 이니셜라이즈 리스트 방식을 이용함. C++11, CULL_NONE은 모두 다 그리는거임. FRONT도 문제없음
-				{ RASTERIZER_TYPE::CULL_NONE, DEPTH_STENCIL_TYPE::LESS_EQUAL }); // 옵션값을 넣어줌.
-			texture->Init(L"..\\Resources\\Texture\\Sky01.jpg");
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Skybox");
+			
+			shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Sky01", L"..\\Resources\\Texture\\Sky01.jpg");
+
 			shared_ptr<Material> material = make_shared<Material>();
 			material->SetShader(shader);
 			material->SetTexture(0, texture);
@@ -214,12 +261,11 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			meshRenderer->SetMesh(sphereMesh);
 		}	
 		{
-			shared_ptr<Shader> shader = make_shared<Shader>();
-			shared_ptr<Texture> texture = make_shared<Texture>();
-			shared_ptr<Texture> texture2 = make_shared<Texture>(); // for normal texture
-			shader->Init(L"..\\Resources\\Shader\\default.hlsli");
-			texture->Init(L"..\\Resources\\Texture\\Stone.jpg");
-			texture2->Init(L"..\\Resources\\Texture\\Stone_Normal.jpg"); // for normal texture
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+
+			shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Stone", L"..\\Resources\\Texture\\Stone.jpg");
+			shared_ptr<Texture> texture2 = GET_SINGLE(Resources)->Load<Texture>(L"Stone_Normal", L"..\\Resources\\Texture\\Stone_Normal.jpg");
+
 			shared_ptr<Material> material = make_shared<Material>();
 			material->SetShader(shader);
 			material->SetTexture(0, texture);
@@ -231,6 +277,32 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 
 #pragma endregion
+
+#pragma region UI_Test
+	{
+		shared_ptr<GameObject> sphere = make_shared<GameObject>();
+		sphere->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI 레이어 설정
+		sphere->AddComponent(make_shared<Transform>());
+		sphere->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+		sphere->GetTransform()->SetLocalPosition(Vec3(0, 0, 500.f));
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+			meshRenderer->SetMesh(mesh);
+		}
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Forward");
+			shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Wallpaper", L"..\\Resources\\Texture\\Wallpaper.jpg");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			material->SetTexture(0, texture);
+			meshRenderer->SetMaterial(material);
+		}
+		sphere->AddComponent(meshRenderer);
+		scene->AddGameObject(sphere);
+	}
+#pragma endregion
+
 
 #pragma region Green Directional Light
 	{

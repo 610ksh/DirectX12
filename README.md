@@ -41,18 +41,18 @@
 - [x] Skybox (10.08) / https://blog.naver.com/610ksh/222531160911
 - [x] Frustum Culling (10.09) / https://blog.naver.com/610ksh/222531953169
 - [x] Quaternion (10.10) / https://blog.naver.com/610ksh/222532786353
-- [ ] Orthographic projection (미정 - 3N 면접 준비중)
-- [ ] Render Target (미정)
-- [ ] Deferred Rendering
-- [ ] Compute Shader
-- [ ] Particle System
-- [ ] Instancing
-- [ ] Shadow Mapping
-- [ ] Tessellation
-- [ ] Terrain
-- [ ] Picking
-- [ ] Mesh
-- [ ] Animation
+- [x] Orthographic projection (11.02) / https://blog.naver.com/610ksh/222556372871
+- [ ] Render Target (11.03)
+- [ ] Deferred Rendering (11.04)
+- [ ] Compute Shader (11.05)
+- [ ] Particle System (11.06)
+- [ ] Instancing (11.07)
+- [ ] Shadow Mapping (11.08)
+- [ ] Tessellation (11.09)
+- [ ] Terrain (11.10)
+- [ ] Picking (11.11)
+- [ ] Mesh (11.12)
+- [ ] Animation (11.13)
 
 
 
@@ -138,20 +138,20 @@
 
 ---
 # 🎨Chapter5. Quaternion
-### 1. 추가 예정
-![]()
+### 1. 오일러각과 짐벌락 현상
+![Image](Git_Resources/Chapter5/짐벌락.png)
 
-### 2. 추가 예정
-![]()
+### 2. 2차원 Quaternion
+![Image](Git_Resources/Chapter5/Quaternion2.png)
 
-### 3. 추가 예정
-![]()
+## 3. 3차원 Quaternion
+![Image](Git_Resources/Chapter5/Quaternion.png)
+![Image](Git_Resources/Chapter5/Quaternion3.png)
 
 ---
 # 🎨Chapter6. Rendering
-## Lecture1. 시작하기
-### 1. x
-![]()
+## 1. Orthographic Projection (for UI)
+![Image](Git_Resources/Chapter6/OrthographicProjection.gif)
 
 ### 2. x
 ![]()

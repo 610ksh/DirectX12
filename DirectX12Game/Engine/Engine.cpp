@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "Timer.h"
 #include "SceneManager.h"
+#include "Resources.h"
 
 /// 엔진 초기화
 void Engine::Init(const WindowInfo& info)
@@ -46,6 +47,8 @@ void Engine::Init(const WindowInfo& info)
 	/// 장치 초기화
 	GET_SINGLE(Input)->Init(info.hwnd);
 	GET_SINGLE(Timer)->Init();
+
+	GET_SINGLE(Resources)->Init();
 }
 
 void Engine::Update()

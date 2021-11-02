@@ -45,6 +45,10 @@ public:
 	void SetCheckFrustum(bool checkFrustum) { _checkFrustum = checkFrustum; }
 	bool GetCheckFrustum() { return _checkFrustum; }
 
+	/// layer
+	void SetLayerIndex(uint8 layer) { _layerIndex = layer; }
+	uint8 GetLayerIndex() { return _layerIndex; }
+
 private:
 	// component를 array로 들고 있음.
 	// [0] : transform, [1] : mesh renderer 이런식으로 순서가 정해져있음. 같은것은 2개 올 수 없음.
@@ -53,5 +57,6 @@ private:
 	vector<shared_ptr<MonoBehaviour>> _scripts;
 
 	bool _checkFrustum = true; // 컬링할지 안할지 판별용도.
+	uint8 _layerIndex = 0;
 };
 

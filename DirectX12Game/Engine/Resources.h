@@ -11,6 +11,8 @@ class Resources
 	DECLARE_SINGLE(Resources);
 
 public:
+	void Init();
+
 	template<typename T>
 	shared_ptr<T> Load(const wstring& key, const wstring& path);
 
@@ -23,9 +25,13 @@ public:
 	template<typename T>
 	OBJECT_TYPE GetObjectType();
 
-	/// 큐브와 구 매시 Load
+	/// 사각형, 큐브와 구 매시 Load
+	shared_ptr<Mesh> LoadRectangleMesh();
 	shared_ptr<Mesh> LoadCubeMesh();
 	shared_ptr<Mesh> LoadSphereMesh();
+
+private:
+	void CreateDefaultShader();
 
 private:
 	// using을 통해 자료형을 압축했음. std::map을 사용. (key, resource) 형태로 들고있음.
