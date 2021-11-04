@@ -32,15 +32,14 @@ void Engine::Init(const WindowInfo& info)
 	_swapChain->Init(info, _device->GetDevice(), _device->GetDXGI(), _cmdQueue->GetCmdQueue());
 	_rootSignature->Init();
 	_tableDescHeap->Init(256);
-	// 참고로 밑의 코드는 ResizeWindow에서 한번더 호출하고 있다.
-	// 학습을 목적으로 전체적으로 어떤 구조인지 이해하기 위해 나두도록 하자.
-	_depthStencilBuffer->Init(_window);
 
 	/// b0는 LightParams 용도로 사용할거임. 딱 1개만 셋팅하면 되니까 CBV size를 1로 해줌.
 	CreateConstantBuffer(CBV_REGISTER::b0, sizeof(LightParams), 1);
 	/// Constant Buffer 생성. Transform 용도와 Material 용도. b0는 전역 용도
 	CreateConstantBuffer(CBV_REGISTER::b1, sizeof(TransformParams), 256); // b1로 밀어넣음
 	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 256); // b2로 밀어넣음
+
+	CreateRenderTargetGroups();
 
 	ResizeWindow(info.width, info.height); // 화면 크기를 재조정.
 
@@ -70,7 +69,6 @@ void Engine::Render()
 {
 	RenderBegin();
 
-	/// TODO : 나머지 물체를 그린다.
 	// 해당 씬에 있는 모든 물체를 그린다.
 	GET_SINGLE(SceneManager)->Render();
 
@@ -98,9 +96,6 @@ void Engine::ResizeWindow(int32 width, int32 height)
 	::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 	// 윈도우 위치 설정, 윈도우 핸들 정보 필요
 	::SetWindowPos(_window.hwnd, 0, 100, 100, width, height, 0);
-
-	// DSB 초기화 (DepthStencilBuffer)
-	_depthStencilBuffer->Init(_window);
 }
 
 void Engine::ShowFps()
@@ -134,4 +129,54 @@ void Engine::CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 co
 	buffer->Init(reg, bufferSize, count);
 	// 생성한 버퍼를 버퍼 배열에 추가
 	_constantBuffers.push_back(buffer);
+}
+
+
+void Engine::CreateRenderTargetGroups()
+{
+	// DepthStencil
+	shared_ptr<Texture> dsTexture = GET_SINGLE(Resources)->CreateTexture(L"DepthStencil",
+		DXGI_FORMAT_D32_FLOAT, _window.width, _window.height,
+		CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+
+	// SwapChain Group
+	{
+		vector<RenderTarget> rtVec(SWAP_CHAIN_BUFFER_COUNT);
+
+		for (uint32 i = 0; i < SWAP_CHAIN_BUFFER_COUNT; ++i)
+		{
+			wstring name = L"SwapChainTarget_" + std::to_wstring(i);
+
+			ComPtr<ID3D12Resource> resource;
+			_swapChain->GetSwapChain()->GetBuffer(i, IID_PPV_ARGS(&resource));
+			rtVec[i].target = GET_SINGLE(Resources)->CreateTextureFromResource(name, resource);
+		}
+
+		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)] = make_shared<RenderTargetGroup>();
+		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)]->Create(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN, rtVec, dsTexture);
+	}
+
+	// Deferred Group
+	{
+		vector<RenderTarget> rtVec(RENDER_TARGET_G_BUFFER_GROUP_MEMBER_COUNT);
+
+		rtVec[0].target = GET_SINGLE(Resources)->CreateTexture(L"PositionTarget",
+			DXGI_FORMAT_R32G32B32A32_FLOAT, _window.width, _window.height,
+			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+
+		rtVec[1].target = GET_SINGLE(Resources)->CreateTexture(L"NormalTarget",
+			DXGI_FORMAT_R32G32B32A32_FLOAT, _window.width, _window.height,
+			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+
+		rtVec[2].target = GET_SINGLE(Resources)->CreateTexture(L"DiffuseTarget",
+			DXGI_FORMAT_R8G8B8A8_UNORM, _window.width, _window.height,
+			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+
+		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::G_BUFFER)] = make_shared<RenderTargetGroup>();
+		_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::G_BUFFER)]->Create(RENDER_TARGET_GROUP_TYPE::G_BUFFER, rtVec, dsTexture);
+	}
 }

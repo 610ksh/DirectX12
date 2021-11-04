@@ -6,6 +6,8 @@
 #include "GameObject.h"
 #include "MeshRenderer.h"
 #include "Engine.h"
+#include "Material.h"
+#include "Shader.h"
 
 Matrix Camera::S_MatView;
 Matrix Camera::S_MatProjection;
@@ -38,34 +40,24 @@ void Camera::FinalUpdate()
 	_frustum.FinalUpdate();
 }
 
-void Camera::Render()
+void Camera::SortGameObject()
 {
-	/// 임시 static 변수에 넣어줌
-	S_MatView = _matView;
-	S_MatProjection = _matProjection;
-
-
-	// 현재 카메라가 소속된 전체 하나의 Scene을 가져옴 (싱글톤 이용)
 	shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetActiveScene();
-
-	// 씬에 소속된 모든 게임 오브젝트들을 담은 벡터를 가져온다.
 	const vector<shared_ptr<GameObject>>& gameObjects = scene->GetGameObjects();
+
+	_vecForward.clear();
+	_vecDeferred.clear();
 
 	for (auto& gameObject : gameObjects)
 	{
 		if (gameObject->GetMeshRenderer() == nullptr)
 			continue;
-		
-		/// Layer를 통한 컬링.
-		if (IsCulled(gameObject->GetLayerIndex()))
-			continue; // 컬링 대상이면 Render안하고 넘어감. 무시.
 
-		/// Frustum Culling 부분 (상대적으로 무거움)
-		// Frustum check를 해야하는 물체인지 판별. skybox같은건 false
-		// 컬링할거면 Render안하고 continue때림
-		if (gameObject->GetCheckFrustum()) // 일단 기준이 맞으면 내부로
+		if (IsCulled(gameObject->GetLayerIndex()))
+			continue;
+
+		if (gameObject->GetCheckFrustum())
 		{
-			// 컬링하는 대상인데, 이때 만약 내부에 들어오지 못했다면 컬링한다.
 			if (_frustum.ContainsSphere(
 				gameObject->GetTransform()->GetWorldPosition(),
 				gameObject->GetTransform()->GetBoundingSphereRadius()) == false)
@@ -73,7 +65,38 @@ void Camera::Render()
 				continue;
 			}
 		}
-		/// 무조건 렌더링함.
+
+		SHADER_TYPE shaderType = gameObject->GetMeshRenderer()->GetMaterial()->GetShader()->GetShaderType();
+		switch (shaderType)
+		{
+		case SHADER_TYPE::DEFERRED:
+			_vecDeferred.push_back(gameObject);
+			break;
+		case SHADER_TYPE::FORWARD:
+			_vecForward.push_back(gameObject);
+			break;
+		}
+	}
+}
+
+void Camera::Render_Deferred()
+{
+	S_MatView = _matView;
+	S_MatProjection = _matProjection;
+
+	for (auto& gameObject : _vecDeferred)
+	{
+		gameObject->GetMeshRenderer()->Render();
+	}
+}
+
+void Camera::Render_Forward()
+{
+	S_MatView = _matView;
+	S_MatProjection = _matProjection;
+
+	for (auto& gameObject : _vecForward)
+	{
 		gameObject->GetMeshRenderer()->Render();
 	}
 }

@@ -75,11 +75,14 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 	_cmdAlloc->Reset();
 	_cmdList->Reset(_cmdAlloc.Get(), nullptr); // close였던 cmdlist를 open함
 
+	int8 backIndex = _swapChain->GetBackBufferIndex();
+
 	// 배리어 생성
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-		_swapChain->GetBackRTVBuffer().Get(),
+		GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->GetRTTexture(backIndex)->GetTex2D().Get(),
 		D3D12_RESOURCE_STATE_PRESENT, // 화면 출력
 		D3D12_RESOURCE_STATE_RENDER_TARGET); // 외주 결과물
+
 
 	/// 루트 시그니처 추가.
 	_cmdList->SetGraphicsRootSignature(ROOT_SIGNATURE.Get());
@@ -98,7 +101,6 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 	// 그 다음에 비로소 레지스터 쪽으로 위로 올려보내는 SetGraphicsRootDescriptorTable 함수가 실행되어야 한다.
 	_cmdList->SetDescriptorHeaps(1, &descHeap); // 1개의 큰 DescriptorHeaps를 지정함.
 
-
 	// 위에서 만든 배리어를 List에 넣음
 	_cmdList->ResourceBarrier(1, &barrier);
 
@@ -106,36 +108,18 @@ void CommandQueue::RenderBegin(const D3D12_VIEWPORT * vp, const D3D12_RECT * rec
 	_cmdList->RSSetViewports(1, vp);
 	_cmdList->RSSetScissorRects(1, rect);
 
-	/// 어떤 버퍼에 그림을 그려야할지 설정.
-	// Specify the buffers we are going to render to.  // 실제 RTV가 필요함
-	D3D12_CPU_DESCRIPTOR_HANDLE backBufferView = _swapChain->GetBackRTV();
-	
-	// 현재 backbuffer의 rtv를 초기화해준다. 종이를 리셋시켜줌.
-	_cmdList->ClearRenderTargetView(backBufferView, Colors::Black, 0, nullptr);
-
-	/// DepthStencilView
-	D3D12_CPU_DESCRIPTOR_HANDLE depthStencilView = GEngine->GetDepthStencilBuffer()->GetDSVCpuHandle();
-	
-	// OM : Output Merge state, 백버퍼를 넘겨서 그려달라고 요청함.
-	// depthStencilView를 사용했음을 알려줌.
-	_cmdList->OMSetRenderTargets(1, &backBufferView, FALSE, &depthStencilView);
-
-	// depth는 1.0f으로 초기화, stencil은 사용 안하기 때문에 0으로 초기화. 나머지도 0과 nullptr.
-	// 실질적으로 매 프레임마다 DSV를 싸그리 밀어주는 함수.
-	_cmdList->ClearDepthStencilView(depthStencilView, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }
 
 // 백버퍼에 그려진 내용을 화면에 출력하도록 교체해줌.
 void CommandQueue::RenderEnd()
 {
-	// 기본적으로 Begin의 반대개념임.
-	// 백버퍼에서 그렸던것을 이제 화면으로 가져오고,
-	// 화면에 출력하고 있던 것을 백버퍼로 위치를 바꿔줘야함.
+	int8 backIndex = _swapChain->GetBackBufferIndex();
 
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-		_swapChain->GetBackRTVBuffer().Get(),
+		GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->GetRTTexture(backIndex)->GetTex2D().Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, // 외주 결과물
 		D3D12_RESOURCE_STATE_PRESENT); // 화면 출력
+
 
 	// 위에서 만든 배리어를 리스트에 넣음.
 	_cmdList->ResourceBarrier(1, &barrier);
@@ -150,10 +134,6 @@ void CommandQueue::RenderEnd()
 
 	// 버퍼를 교체함. swapChain에게 알려줘야함. 실제 버퍼는 거기에 있으니까.
 	_swapChain->Present(); 
-
-	// Wait until frame commands are complete.  This waiting is inefficient and is
-	// done for simplicity.  Later we will show how to organize our rendering code
-	// so we do not have to wait per frame.
 	WaitSync(); // 한 프레임에 모두 출력 될때까지 기다림.
 
 	_swapChain->SwapIndex(); // 인덱스도 마저 교체해주자.

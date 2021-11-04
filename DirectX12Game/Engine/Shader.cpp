@@ -14,6 +14,8 @@ Shader::~Shader()
 
 void Shader::Init(const wstring& path, ShaderInfo info)
 {
+	_info = info;
+
 	// VertexShader 생성
 	CreateVertexShader(path, "VS_Main", "vs_5_0"); // 메인함수 생성
 	// PixelShader 생성
@@ -44,11 +46,26 @@ void Shader::Init(const wstring& path, ShaderInfo info)
 	//_pipelineDesc.DepthStencilState.StencilEnable = FALSE; // Stencil 사용x
 	_pipelineDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT); // DepthStencil 한번에 처리
 	_pipelineDesc.SampleMask = UINT_MAX;
-	_pipelineDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	_pipelineDesc.PrimitiveTopologyType = info.topologyType;
 	_pipelineDesc.NumRenderTargets = 1;
 	_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_pipelineDesc.SampleDesc.Count = 1;
-	_pipelineDesc.DSVFormat = GEngine->GetDepthStencilBuffer()->GetDSVFormat(); // DSVFormat 초기화
+	_pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT; // DSVFormat 초기화
+
+	switch (info.shaderType)
+	{
+	case SHADER_TYPE::DEFERRED:
+		_pipelineDesc.NumRenderTargets = RENDER_TARGET_G_BUFFER_GROUP_MEMBER_COUNT;
+		_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R32G32B32A32_FLOAT; // POSITION
+		_pipelineDesc.RTVFormats[1] = DXGI_FORMAT_R32G32B32A32_FLOAT; // NORMAL
+		_pipelineDesc.RTVFormats[2] = DXGI_FORMAT_R8G8B8A8_UNORM; // COLOR
+		break;
+	case SHADER_TYPE::FORWARD:
+		_pipelineDesc.NumRenderTargets = 1;
+		_pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		break;
+	}
+
 
 	/// ShaderInfo 설정. rasterizerType
 	switch (info.rasterizerType)

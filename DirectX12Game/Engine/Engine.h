@@ -5,11 +5,11 @@
 #include "SwapChain.h"
 #include "RootSignature.h"
 #include "Mesh.h"
-#include "Shader.h" // 클라이언트쪽에서 필요하기 떄문에 넣어줌. (Game.cpp)
+#include "Shader.h" // 클라이언트쪽에서 필요하기 때문에 넣어줌. (Game.cpp)
 #include "ConstantBuffer.h"
 #include "TableDescriptorHeap.h"
 #include "Texture.h"
-#include "DepthStencilBuffer.h"
+#include "RenderTargetGroup.h" // Added
 
 /*
 	웬만하면 엔진쪽은 렌더링 관련된 부분만 놔두자.
@@ -33,10 +33,10 @@ public:
 	shared_ptr<SwapChain> GetSwapChain() { return _swapChain; };
 	shared_ptr<RootSignature> GetRootSignature() { return _rootSignature; };
 	shared_ptr<TableDescriptorHeap> GetTableDescHeap() { return _tableDescHeap; }
-	shared_ptr<DepthStencilBuffer> GetDepthStencilBuffer() { return _depthStencilBuffer; }
 
 	// 벡터를 꺼내 쓰도록 getter 추가
 	shared_ptr<ConstantBuffer> GetConstantBuffer(CONSTANT_BUFFER_TYPE type) { return _constantBuffers[static_cast<uint8>(type)]; }
+	shared_ptr<RenderTargetGroup> GetRTGroup(RENDER_TARGET_GROUP_TYPE type) { return _rtGroups[static_cast<uint8>(type)]; }
 
 public:
 	void Render();
@@ -51,6 +51,7 @@ private:
 	void ShowFps();
 	// CB 만듦.
 	void CreateConstantBuffer(CBV_REGISTER reg, uint32 bufferSize, uint32 count);
+	void CreateRenderTargetGroups();
 
 private:
 	// 그려질 화면 크기 관련 3총사
@@ -64,8 +65,8 @@ private:
 	shared_ptr<SwapChain> _swapChain = make_shared<SwapChain>();
 	shared_ptr<RootSignature> _rootSignature = make_shared<RootSignature>();
 	shared_ptr<TableDescriptorHeap> _tableDescHeap = make_shared<TableDescriptorHeap>();
-	shared_ptr<DepthStencilBuffer> _depthStencilBuffer = make_shared<DepthStencilBuffer>();
 
 	// 다양한 Constant Buffer를 저장해둘 배열 선언
 	vector<shared_ptr<ConstantBuffer>> _constantBuffers;
+	array<shared_ptr<RenderTargetGroup>, RENDER_TARGET_GROUP_COUNT> _rtGroups;
 };

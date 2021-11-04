@@ -9,17 +9,30 @@ public:
 
 	virtual void Load(const wstring& path) override;
 
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHandle() { return _srvHandle; }
+public:
+	// 쌩으로 텍스처를 만드는 경우
+	void Create(DXGI_FORMAT format, uint32 width, uint32 height,
+		const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,
+		D3D12_RESOURCE_FLAGS resFlags, Vec4 clearColor = Vec4());
+
+	void CreateFromResource(ComPtr<ID3D12Resource> tex2D); // 이미지가 있는 상태
 
 public:
-	void CreateTexture(const wstring& path);
-	void CreateView();
+	ComPtr<ID3D12Resource> GetTex2D() { return _tex2D; }
+	ComPtr<ID3D12DescriptorHeap> GetSRV() { return _srvHeap; }
+	ComPtr<ID3D12DescriptorHeap> GetRTV() { return _rtvHeap; }
+	ComPtr<ID3D12DescriptorHeap> GetDSV() { return _dsvHeap; }
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GetSRVHandle() { return _srvHeapBegin; }
 
 private:
-	ScratchImage			 		_image;  // 텍스처를 로드하는 변수
+	ScratchImage			 		_image;
 	ComPtr<ID3D12Resource>			_tex2D;
 
-	ComPtr<ID3D12DescriptorHeap>	_srvHeap; // view를 받는 변수
-	D3D12_CPU_DESCRIPTOR_HANDLE		_srvHandle = {}; // 초기화 해줌.
-};
+	ComPtr<ID3D12DescriptorHeap>	_srvHeap;
+	ComPtr<ID3D12DescriptorHeap>	_rtvHeap;
+	ComPtr<ID3D12DescriptorHeap>	_dsvHeap;
 
+private:
+	D3D12_CPU_DESCRIPTOR_HANDLE		_srvHeapBegin = {};
+};

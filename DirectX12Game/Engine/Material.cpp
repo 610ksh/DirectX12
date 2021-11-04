@@ -28,7 +28,7 @@ void Material::PushData()
 		// 텍스처 레지스터 번호 가져오기
 		SRV_REGISTER reg = SRV_REGISTER(static_cast<int8>(SRV_REGISTER::t0) + i);
 		// SetSRV
-		GEngine->GetTableDescHeap()->SetSRV(_textures[i]->GetCpuHandle(), reg);
+		GEngine->GetTableDescHeap()->SetSRV(_textures[i]->GetSRVHandle(), reg);
 	}
 
 	/// 3. 파이프라인 세팅

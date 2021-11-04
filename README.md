@@ -42,17 +42,17 @@
 - [x] Frustum Culling (10.09) / https://blog.naver.com/610ksh/222531953169
 - [x] Quaternion (10.10) / https://blog.naver.com/610ksh/222532786353
 - [x] Orthographic projection (11.02) / https://blog.naver.com/610ksh/222556372871
-- [ ] Render Target (11.03)
-- [ ] Deferred Rendering (11.04)
-- [ ] Compute Shader (11.05)
-- [ ] Particle System (11.06)
-- [ ] Instancing (11.07)
-- [ ] Shadow Mapping (11.08)
-- [ ] Tessellation (11.09)
-- [ ] Terrain (11.10)
-- [ ] Picking (11.11)
-- [ ] Mesh (11.12)
-- [ ] Animation (11.13)
+- [x] Render Target (Multiple Render Target, = MRT)) (11.04) / https://blog.naver.com/610ksh/222558947412
+- [ ] Deferred Rendering (11.05)
+- [ ] Compute Shader (11.06)
+- [ ] Particle System (11.07)
+- [ ] Instancing ()
+- [ ] Shadow Mapping ()
+- [ ] Tessellation ()
+- [ ] Terrain ()
+- [ ] Picking ()
+- [ ] Mesh ()
+- [ ] Animation ()
 
 
 
@@ -153,10 +153,10 @@
 ## 1. Orthographic Projection (for UI)
 ![Image](Git_Resources/Chapter6/OrthographicProjection.gif)
 
-### 2. x
-![]()
+### 2. Multiple Render Target(MRT)
+![Image](Git_Resources/Chapter6/MultipleRenderTarget.gif)
 
-### 3. x
+### 3. Deferred Rendering
 ![]()
 
 ---

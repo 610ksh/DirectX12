@@ -65,7 +65,6 @@ float4 PS_Main(VS_OUT input) : SV_Target
 		// 기존 색깔을 텍스처 색상으로 바꿔줌.
 		color = g_tex_0.Sample(g_sam_0, input.uv);
 	
-
 	// 처음에 설정한 디폴트 Normal 값 초기화
 	float3 viewNormal = input.viewNormal;
 

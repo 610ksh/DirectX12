@@ -67,9 +67,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>소스 파일\Object\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="DepthStencilBuffer.cpp">
-      <Filter>소스 파일\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>소스 파일\Object\Resource</Filter>
     </ClCompile>
@@ -121,6 +118,9 @@
     <ClCompile Include="Frustum.cpp">
       <Filter>소스 파일\Object\Component</Filter>
     </ClCompile>
+    <ClCompile Include="RenderTargetGroup.cpp">
+      <Filter>소스 파일\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -161,9 +161,6 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>소스 파일\Object\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="DepthStencilBuffer.h">
-      <Filter>소스 파일\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>소스 파일\Object\Resource</Filter>
@@ -216,6 +213,9 @@
     <ClInclude Include="Frustum.h">
       <Filter>소스 파일\Object\Component</Filter>
     </ClInclude>
+    <ClInclude Include="RenderTargetGroup.h">
+      <Filter>소스 파일\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -233,6 +233,9 @@
       <Filter>소스 파일\Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Resources\Shader\forward.fx">
+      <Filter>소스 파일\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Resources\Shader\deferred.fx">
       <Filter>소스 파일\Shader</Filter>
     </FxCompile>
   </ItemGroup>
