@@ -8,9 +8,10 @@ class Texture;
 // 전체 개수를 위한 enum
 enum
 {
-	MATERIAL_INT_COUNT = 5,
-	MATERIAL_FLOAT_COUNT = 5,
-	MATERIAL_TEXTURE_COUNT = 5,
+	MATERIAL_INT_COUNT = 4,
+	MATERIAL_FLOAT_COUNT = 4,
+	MATERIAL_TEXTURE_COUNT = 4,
+	MATERIAL_VECTOR2_COUNT = 4,
 };
 
 struct MaterialParams
@@ -19,6 +20,7 @@ struct MaterialParams
 	void SetInt(uint8 index, int32 value) { intParams[index] = value; }
 	void SetFloat(uint8 index, float value) { floatParams[index] = value; }
 	void SetTexOn(uint8 index, int32 value) { texOnParams[index] = value; }
+	void SetVec2(uint8 index, Vec2 value) { vec2Params[index] = value; }
 
 	// std::array 선언, 범위체크를 자동으로 하는 기능이 내장되어있다.
 	// 일반 배열보다 권장됨. 안정성 체크.
@@ -27,6 +29,7 @@ struct MaterialParams
 	array<int32, MATERIAL_INT_COUNT> intParams; // 5개 생성
 	array<float, MATERIAL_FLOAT_COUNT> floatParams; // 5개 생성
 	array<int32, MATERIAL_TEXTURE_COUNT> texOnParams; // 텍스처를 사용하는지 여부 변수
+	array<Vec2, MATERIAL_VECTOR2_COUNT> vec2Params;
 };
 
 /// Material
@@ -48,6 +51,8 @@ public:
 		// 텍스처 정보가 nullptr이면 0 아니면 1로 설정. 3항연산자
 		_params.SetTexOn(index, (texture == nullptr ? 0 : 1));
 	}
+
+	void SetVec2(uint8 index, Vec2 value) { _params.SetVec2(index, value); }
 
 	// 데이터를 밀언허는것.
 	void PushData();

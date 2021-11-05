@@ -41,6 +41,7 @@ public:
 
 private:
 	void CreateDefaultShader();
+	void CreateDefaultMaterial();
 
 private:
 	// using을 통해 자료형을 압축했음. std::map을 사용. (key, resource) 형태로 들고있음.

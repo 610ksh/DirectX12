@@ -238,5 +238,8 @@
     <FxCompile Include="..\Resources\Shader\deferred.fx">
       <Filter>소스 파일\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="..\Resources\Shader\lighting.fx">
+      <Filter>소스 파일\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -13,6 +13,8 @@ public:
 
 	/// 렌더
 	void Render();
+	void RenderLights();
+	void RenderFinal();
 
 private:
 	// 빛 정보를 GPU 쪽으로 넣어주는 함수
@@ -28,5 +30,8 @@ public:
 private:
 	// 게임 오브젝트를 들고 있음.
 	vector<shared_ptr<GameObject>> _gameObjects;
+
+	vector<shared_ptr<class Camera>>	_cameras;
+	vector<shared_ptr<class Light>>		_lights;
 };
 

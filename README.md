@@ -43,7 +43,7 @@
 - [x] Quaternion (10.10) / https://blog.naver.com/610ksh/222532786353
 - [x] Orthographic projection (11.02) / https://blog.naver.com/610ksh/222556372871
 - [x] Render Target (Multiple Render Target, = MRT)) (11.04) / https://blog.naver.com/610ksh/222558947412
-- [ ] Deferred Rendering (11.05)
+- [x] Deferred Rendering (11.05) / https://blog.naver.com/610ksh/222559311395
 - [ ] Compute Shader (11.06)
 - [ ] Particle System (11.07)
 - [ ] Instancing ()
@@ -67,27 +67,26 @@
 
 ---
 # 🎨Chapter1. DirectX12 초기화
-## Lecture1. 시작하기
-### 1. 프로젝트 셋팅 & 장치 초기화 완료(초기화면)
+## 1. 프로젝트 셋팅 & 장치 초기화 완료(초기화면)
 ![Image](Git_Resources/Chapter1/초기화.png)
 
-### 2. 삼각형 띄우기 (VertexBuffer, VertexBufferView = VBV)
+## 2. 삼각형 띄우기 (VertexBuffer, VertexBufferView = VBV)
 ![Image](Git_Resources/Chapter1/triangle.png)
 
-### 3. Constant Buffer (ConstantBufferView)
+## 3. Constant Buffer (ConstantBufferView)
 ![Image](Git_Resources/Chapter1/triangle2.png)
 ![Image](Git_Resources/Chapter1/triangle2-2.png)
 
-### 4. Descriptor table
+## 4. Descriptor table
 ![Image](Git_Resources/Chapter1/TableDescriptorHeap.png)
 
-### 5. Index Buffer (IndexBufferView)
+## 5. Index Buffer (IndexBufferView)
 ![Image](Git_Resources/Chapter1/IndexBuffer.png)
 
-### 6. Texture Mapping
+## 6. Texture Mapping
 ![Image](Git_Resources/Chapter1/TextureMapping.png)
 
-### 7. Depth Stencil View (Depth Buffer)
+## 7. Depth Stencil View (Depth Buffer)
 ![Image](Git_Resources/Chapter1/DepthStencilView.png)
 
 
@@ -138,10 +137,10 @@
 
 ---
 # 🎨Chapter5. Quaternion
-### 1. 오일러각과 짐벌락 현상
+## 1. 오일러각과 짐벌락 현상
 ![Image](Git_Resources/Chapter5/짐벌락.png)
 
-### 2. 2차원 Quaternion
+## 2. 2차원 Quaternion
 ![Image](Git_Resources/Chapter5/Quaternion2.png)
 
 ## 3. 3차원 Quaternion
@@ -153,11 +152,11 @@
 ## 1. Orthographic Projection (for UI)
 ![Image](Git_Resources/Chapter6/OrthographicProjection.gif)
 
-### 2. Multiple Render Target(MRT)
+## 2. Multiple Render Target(MRT)
 ![Image](Git_Resources/Chapter6/MultipleRenderTarget.gif)
 
-### 3. Deferred Rendering
-![]()
+## 3. Deferred Rendering 
+![Image](Git_Resources/Chapter6/DeferredRendering.gif)
 
 ---
 # 🎨Chapter7. Particle
