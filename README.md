@@ -44,8 +44,10 @@
 - [x] Orthographic projection (11.02) / https://blog.naver.com/610ksh/222556372871
 - [x] Render Target (Multiple Render Target, = MRT)) (11.04) / https://blog.naver.com/610ksh/222558947412
 - [x] Deferred Rendering (11.05) / https://blog.naver.com/610ksh/222559311395
-- [ ] Compute Shader (11.06)
-- [ ] Particle System (11.07)
+
+<!--
+- [ ] Compute Shader ()
+- [ ] Particle System ()
 - [ ] Instancing ()
 - [ ] Shadow Mapping ()
 - [ ] Tessellation ()
@@ -53,7 +55,7 @@
 - [ ] Picking ()
 - [ ] Mesh ()
 - [ ] Animation ()
-
+-->
 
 
 ## :heavy_check_mark: Languages & Library
@@ -158,6 +160,7 @@
 ## 3. Deferred Rendering 
 ![Image](Git_Resources/Chapter6/DeferredRendering.gif)
 
+<!--
 ---
 # 🎨Chapter7. Particle
 ## Lecture1. 시작하기
@@ -208,7 +211,7 @@
 
 ---
 
-
+-->
 
 
 ## MIT License
